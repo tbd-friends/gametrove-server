@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using api.Commands;
 using api.Storage;
 using api.Storage.Models;
+using api.ViewModels;
 using MediatR;
 
 namespace api.Handlers
 {
-    public class RegisterGameHandler : IRequestHandler<RegisterGame>
+    public class RegisterGameHandler : IRequestHandler<RegisterGame, GameViewModel>
     {
         private readonly GameTrackerContext _context;
 
@@ -17,7 +18,7 @@ namespace api.Handlers
             _context = context;
         }
 
-        public async Task<Unit> Handle(RegisterGame request, CancellationToken cancellationToken)
+        public async Task<GameViewModel> Handle(RegisterGame request, CancellationToken cancellationToken)
         {
             var exists = _context.Games.SingleOrDefault(g => g.Code == request.Code);
 
@@ -31,9 +32,16 @@ namespace api.Handlers
                 });
 
                 await _context.SaveChangesAsync(cancellationToken);
+
+                return new GameViewModel
+                {
+                    Code = request.Code,
+                    Description = request.Description,
+                    Name = request.Name
+                };
             }
 
-            return Unit.Value;
+            return null;
         }
     }
 }

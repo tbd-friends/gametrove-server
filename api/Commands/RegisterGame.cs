@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using api.ViewModels;
+using MediatR;
 
 namespace api.Commands
 {
-    public class RegisterGame : IRequest
+    public class RegisterGame : IRequest<GameViewModel>
     {
         public string Name { get; set; }
         public string Description { get; set; }
