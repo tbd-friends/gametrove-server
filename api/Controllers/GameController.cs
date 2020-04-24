@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using api.Commands;
 using api.Models;
+using api.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,22 @@ namespace api.Controllers
                 Description = model.Description,
                 Code = model.Code
             });
+        }
+
+        [HttpGet, Route("codes/{code}")]
+        public async Task<ActionResult<GameViewModel>> GetGameByCode(string code)
+        {
+            var game = await _mediator.Send(new RetrieveGameByCode
+            {
+                Code = code
+            });
+
+            if (game != null)
+            {
+                return Ok(game);
+            }
+
+            return NotFound();
         }
     }
 }
