@@ -1,7 +1,7 @@
 ﻿using api.ViewModels;
 using MediatR;
 
-namespace api.Commands
+namespace api.Query
 {
     public class RetrieveGameByCode : IRequest<GameViewModel>
     {

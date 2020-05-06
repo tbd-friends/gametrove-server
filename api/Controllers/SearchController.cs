@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using api.Query;
+using api.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("games")]
-        public async Task<IEnumerable<string>> SearchGames(string text)
+        public async Task<IEnumerable<SearchResultViewModel>> SearchGames(string text)
         {
-            return await _mediator.Send<IEnumerable<string>>(new SearchForGame() { Text = text });
+            return await _mediator.Send(new SearchForGame() { Text = text });
         }
     }
 }

@@ -5,7 +5,7 @@ using api.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Commands.Handlers
+namespace api.Query.Handlers
 {
     public class RetrieveGameByCodeHandler : IRequestHandler<RetrieveGameByCode, GameViewModel>
     {
@@ -24,7 +24,8 @@ namespace api.Commands.Handlers
             {
                 Code = game.Code,
                 Description = game.Description,
-                Name = game.Name
+                Name = game.Name,
+                Registered = game.Registered
             } : null;
         }
     }

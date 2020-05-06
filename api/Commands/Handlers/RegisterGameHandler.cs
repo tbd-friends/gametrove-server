@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using api.Storage;
@@ -27,7 +28,8 @@ namespace api.Commands.Handlers
                 {
                     Name = request.Name,
                     Description = request.Description,
-                    Code = request.Code
+                    Code = request.Code,
+                    Registered = DateTime.UtcNow
                 });
 
                 await _context.SaveChangesAsync(cancellationToken);
