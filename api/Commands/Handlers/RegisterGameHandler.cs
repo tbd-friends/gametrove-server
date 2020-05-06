@@ -1,13 +1,12 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using api.Commands;
 using api.Storage;
 using api.Storage.Models;
 using api.ViewModels;
 using MediatR;
 
-namespace api.Handlers
+namespace api.Commands.Handlers
 {
     public class RegisterGameHandler : IRequestHandler<RegisterGame, GameViewModel>
     {

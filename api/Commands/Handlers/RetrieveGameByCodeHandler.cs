@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using api.Commands;
 using api.Storage;
 using api.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Handlers
+namespace api.Commands.Handlers
 {
     public class RetrieveGameByCodeHandler : IRequestHandler<RetrieveGameByCode, GameViewModel>
     {
