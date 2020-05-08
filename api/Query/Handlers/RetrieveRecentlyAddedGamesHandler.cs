@@ -20,14 +20,16 @@ namespace api.Query.Handlers
 
         public Task<IEnumerable<GameViewModel>> Handle(RetrieveRecentlyAddedGames request, CancellationToken cancellationToken)
         {
-            var recentlyAddedGames = _context.Games.OrderByDescending(g => g.Registered);
+            var recentlyAddedGames = _context.PlatformGames.OrderByDescending(g => g.Registered);
 
             return Task.FromResult((from x in recentlyAddedGames.Take(request.Limit)
+                                    join g in _context.Games on x.GameId equals g.Id
                                     select new GameViewModel
                                     {
-                                        Name = x.Name,
+
+                                        Name = g.Name,
                                         Code = x.Code,
-                                        Description = x.Description,
+                                        Description = g.Description,
                                         Registered = x.Registered
                                     }).AsEnumerable());
         }

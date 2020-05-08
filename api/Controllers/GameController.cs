@@ -28,7 +28,8 @@ namespace api.Controllers
             {
                 Name = model.Name,
                 Description = model.Description,
-                Code = model.Code
+                Code = model.Code,
+                Platform = model.Platform
             });
 
             return result != null ? (IActionResult)Created($"/games/codes/{result.Code}", result) : Conflict();

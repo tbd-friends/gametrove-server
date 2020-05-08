@@ -20,25 +20,37 @@ namespace api.Commands.Handlers
 
         public async Task<GameViewModel> Handle(RegisterGame request, CancellationToken cancellationToken)
         {
-            var exists = _context.Games.SingleOrDefault(g => g.Code == request.Code);
+            var exists = _context.PlatformGames.SingleOrDefault(g => g.Code == request.Code);
 
             if (exists == null)
             {
-                _context.Add(new Game
+                var game = new Game
                 {
                     Name = request.Name,
-                    Description = request.Description,
+                    Description = request.Description
+                };
+
+                _context.Add(game);
+
+                var platformGame = new PlatformGame()
+                {
+                    GameId = game.Id,
                     Code = request.Code,
+                    PlatformId = request.Platform,
                     Registered = DateTime.UtcNow
-                });
+                };
+
+                _context.Add(platformGame);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
                 return new GameViewModel
                 {
+                    Id = game.Id,
+                    Name = game.Name,
+                    Description = game.Description,
                     Code = request.Code,
-                    Description = request.Description,
-                    Name = request.Name
+                    Registered = platformGame.Registered
                 };
             }
 

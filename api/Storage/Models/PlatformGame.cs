@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace api.ViewModels
+namespace api.Storage.Models
 {
-    public class GameViewModel
+    public class PlatformGame
     {
         public Guid Id { get; set; }
+        public Guid GameId { get; set; }
+        public Guid PlatformId { get; set; }
         public string Code { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
         public DateTime Registered { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using api.Storage;
+using api.Storage.Models;
 using api.ViewModels;
 using MediatR;
 
@@ -18,14 +19,15 @@ namespace api.Query.Handlers
 
         public Task<GameViewModel> Handle(RetrieveGameById request, CancellationToken cancellationToken)
         {
-            var result = (from g in _context.Games
-                          where g.Id == request.Id
+            var result = (from p in _context.PlatformGames
+                          join g in _context.Games on p.GameId equals g.Id
+                          where p.Id == request.Id
                           select new GameViewModel
                           {
-                              Code = g.Code,
+                              Code = p.Code,
                               Description = g.Description,
                               Name = g.Name,
-                              Registered = g.Registered
+                              Registered = p.Registered
                           }).SingleOrDefault();
 
             return Task.FromResult(result);

@@ -1,4 +1,5 @@
-﻿using api.ViewModels;
+﻿using System;
+using api.ViewModels;
 using MediatR;
 
 namespace api.Commands
@@ -8,5 +9,6 @@ namespace api.Commands
         public string Name { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
+        public Guid Platform { get; set; }
     }
 }

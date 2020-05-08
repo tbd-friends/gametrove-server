@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using api.Storage;
 using api.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace api.Query.Handlers
 {
@@ -18,7 +20,16 @@ namespace api.Query.Handlers
 
         public async Task<GameViewModel> Handle(RetrieveGameByCode request, CancellationToken cancellationToken)
         {
-            var game = await _context.Games.SingleOrDefaultAsync(g => g.Code == request.Code, cancellationToken);
+            var game = await (from p in _context.PlatformGames
+                              join g in _context.Games on p.GameId equals g.Id
+                              where p.Code == request.Code
+                              select new
+                              {
+                                  Name = g.Name,
+                                  Description = g.Description,
+                                  Registered = p.Registered,
+                                  Code = p.Code
+                              }).SingleOrDefaultAsync(cancellationToken: cancellationToken);
 
             return game != null ? new GameViewModel
             {

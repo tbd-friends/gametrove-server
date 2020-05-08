@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace api.Storage.Models
+namespace api.ViewModels
 {
-    public class Game
+    public class PlatformViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
     }
 }
