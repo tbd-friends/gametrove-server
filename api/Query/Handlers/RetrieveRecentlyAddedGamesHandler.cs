@@ -26,7 +26,7 @@ namespace api.Query.Handlers
                                     join g in _context.Games on x.GameId equals g.Id
                                     select new GameViewModel
                                     {
-
+                                        Id = x.Id,
                                         Name = g.Name,
                                         Code = x.Code,
                                         Description = g.Description,

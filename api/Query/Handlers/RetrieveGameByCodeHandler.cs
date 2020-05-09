@@ -25,6 +25,7 @@ namespace api.Query.Handlers
                               where p.Code == request.Code
                               select new
                               {
+                                  Id = p.Id,
                                   Name = g.Name,
                                   Description = g.Description,
                                   Registered = p.Registered,
@@ -33,6 +34,7 @@ namespace api.Query.Handlers
 
             return game != null ? new GameViewModel
             {
+                Id = game.Id,
                 Code = game.Code,
                 Description = game.Description,
                 Name = game.Name,

@@ -24,6 +24,7 @@ namespace api.Query.Handlers
                           where p.Id == request.Id
                           select new GameViewModel
                           {
+                              Id = p.Id,
                               Code = p.Code,
                               Description = g.Description,
                               Name = g.Name,

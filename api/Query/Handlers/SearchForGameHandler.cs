@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using api.Storage;
+using api.Storage.Models;
 using api.ViewModels;
 using MediatR;
 
@@ -21,10 +22,19 @@ namespace api.Query.Handlers
         public Task<IEnumerable<SearchResultViewModel>> Handle(SearchForGame request, CancellationToken cancellationToken)
         {
             var results = from g in _context.Games
+                          join pg in _context.PlatformGames on g.Id equals pg.GameId
+                          join p in _context.Platforms on pg.PlatformId equals p.Id
                           where g.Name.Contains(request.Text)
-                          select g;
+                          select new
+                          {
+                              Id = pg.Id,
+                              Game = g,
+                              Platform = p.Name
+                          };
 
-            return Task.FromResult(results.Select(r => new SearchResultViewModel { Id = r.Id, Name = r.Name })
+            return Task.FromResult(results
+                .Select(r => new SearchResultViewModel { Id = r.Id, Name = $"{r.Game.Name}({r.Platform})" })
+                .OrderBy(o => o.Name)
                 .AsEnumerable());
         }
     }
