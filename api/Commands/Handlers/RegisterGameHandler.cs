@@ -26,8 +26,8 @@ namespace api.Commands.Handlers
             {
                 var game = new Game
                 {
-                    Name = request.Name,
-                    Description = request.Description
+                    Name = request.Name.Trim(),
+                    Description = request.Description.Trim()
                 };
 
                 _context.Add(game);

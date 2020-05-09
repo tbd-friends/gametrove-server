@@ -43,6 +43,19 @@ namespace api.Controllers
             return result != null ? new ActionResult<GameViewModel>(result) : NotFound();
         }
 
+        [HttpPut, Route("{id}")]
+        public async Task<ActionResult<GameViewModel>> UpdateGame(UpdateGameModel model)
+        {
+            var result = await _mediator.Send(new UpdateGame
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description
+            });
+
+            return result != null ? new ActionResult<GameViewModel>(result) : BadRequest();
+        }
+
         [HttpGet, Route("last/{count}")]
         public async Task<IEnumerable<GameViewModel>> GetLastXGames(int count = 10)
         {

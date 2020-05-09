@@ -25,16 +25,15 @@ namespace api.Query.Handlers
                           join pg in _context.PlatformGames on g.Id equals pg.GameId
                           join p in _context.Platforms on pg.PlatformId equals p.Id
                           where g.Name.Contains(request.Text)
+                          orderby g.Name
                           select new
                           {
                               Id = pg.Id,
-                              Game = g,
-                              Platform = p.Name
+                              Name = $"{g.Name}({p.Name})"
                           };
 
             return Task.FromResult(results
-                .Select(r => new SearchResultViewModel { Id = r.Id, Name = $"{r.Game.Name}({r.Platform})" })
-                .OrderBy(o => o.Name)
+                .Select(r => new SearchResultViewModel { Id = r.Id, Name = r.Name })
                 .AsEnumerable());
         }
     }

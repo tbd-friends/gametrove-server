@@ -10,4 +10,9 @@ namespace api.Models
         public string Code { get; set; }
         public Guid Platform { get; set; }
     }
+
+    public class UpdateGameModel : GameModel
+    {
+        public Guid Id { get; set; }
+    }
 }
