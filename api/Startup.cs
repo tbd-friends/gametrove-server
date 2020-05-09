@@ -32,6 +32,11 @@ namespace api
             services.AddDbContextPool<GameTrackerContext>(sql =>
                 sql.UseSqlServer(Configuration.GetConnectionString("gametracker")));
             services.AddMediatR(typeof(Startup));
+
+            services.AddOpenApiDocument(configure =>
+            {
+                configure.Title = "GameTracker API";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +48,13 @@ namespace api
             }
 
             //app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+            app.UseSwaggerUi3(settings =>
+            {
+                settings.Path = "/api";
+                settings.DocumentPath = "/api/specification.json";
+            });
 
             app.UseRouting();
 
