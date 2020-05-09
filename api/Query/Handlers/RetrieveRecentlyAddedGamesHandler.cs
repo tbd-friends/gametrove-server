@@ -23,6 +23,7 @@ namespace api.Query.Handlers
             var recentlyAddedGames = _context.PlatformGames.OrderByDescending(g => g.Registered);
 
             return Task.FromResult((from x in recentlyAddedGames.Take(request.Limit)
+                                    join p in _context.Platforms on x.PlatformId equals p.Id
                                     join g in _context.Games on x.GameId equals g.Id
                                     select new GameViewModel
                                     {
@@ -30,7 +31,8 @@ namespace api.Query.Handlers
                                         Name = g.Name,
                                         Code = x.Code,
                                         Description = g.Description,
-                                        Registered = x.Registered
+                                        Registered = x.Registered,
+                                        Platform = p.Name
                                     }).AsEnumerable());
         }
     }

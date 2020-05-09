@@ -20,16 +20,18 @@ namespace api.Query.Handlers
 
         public async Task<GameViewModel> Handle(RetrieveGameByCode request, CancellationToken cancellationToken)
         {
-            var game = await (from p in _context.PlatformGames
-                              join g in _context.Games on p.GameId equals g.Id
-                              where p.Code == request.Code
+            var game = await (from pg in _context.PlatformGames
+                              join p in _context.Platforms on pg.PlatformId equals p.Id
+                              join g in _context.Games on pg.GameId equals g.Id
+                              where pg.Code == request.Code
                               select new
                               {
-                                  Id = p.Id,
+                                  Id = pg.Id,
                                   Name = g.Name,
                                   Description = g.Description,
-                                  Registered = p.Registered,
-                                  Code = p.Code
+                                  Registered = pg.Registered,
+                                  Code = pg.Code,
+                                  Platform = p.Name
                               }).SingleOrDefaultAsync(cancellationToken: cancellationToken);
 
             return game != null ? new GameViewModel
@@ -38,7 +40,8 @@ namespace api.Query.Handlers
                 Code = game.Code,
                 Description = game.Description,
                 Name = game.Name,
-                Registered = game.Registered
+                Registered = game.Registered,
+                Platform = game.Platform
             } : null;
         }
     }

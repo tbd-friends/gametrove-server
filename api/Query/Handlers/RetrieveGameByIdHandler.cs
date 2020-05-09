@@ -19,16 +19,18 @@ namespace api.Query.Handlers
 
         public Task<GameViewModel> Handle(RetrieveGameById request, CancellationToken cancellationToken)
         {
-            var result = (from p in _context.PlatformGames
-                          join g in _context.Games on p.GameId equals g.Id
-                          where p.Id == request.Id
+            var result = (from pg in _context.PlatformGames
+                          join p in _context.Platforms on pg.PlatformId equals p.Id
+                          join g in _context.Games on pg.GameId equals g.Id
+                          where pg.Id == request.Id
                           select new GameViewModel
                           {
-                              Id = p.Id,
-                              Code = p.Code,
+                              Id = pg.Id,
+                              Code = pg.Code,
                               Description = g.Description,
                               Name = g.Name,
-                              Registered = p.Registered
+                              Registered = pg.Registered,
+                              Platform = p.Name
                           }).SingleOrDefault();
 
             return Task.FromResult(result);

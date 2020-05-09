@@ -29,7 +29,7 @@ namespace api.Query.Handlers
                           select new
                           {
                               Id = pg.Id,
-                              Name = $"{g.Name}({p.Name})"
+                              Name = $"{g.Name} ({p.Name})"
                           };
 
             return Task.FromResult(results

@@ -9,5 +9,6 @@ namespace api.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Registered { get; set; }
+        public string Platform { get; set; }
     }
 }
