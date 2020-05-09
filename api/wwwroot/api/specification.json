@@ -180,6 +180,89 @@
         }
       }
     },
+    "/images/{id}": {
+      "post": {
+        "tags": [
+          "Images"
+        ],
+        "operationId": "Images_AddImageForGame",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "ContentType",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "ContentDisposition",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "Headers",
+            "in": "formData",
+            "schema": {
+              "nullable": true,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/IHeaderDictionary"
+                }
+              ]
+            },
+            "x-position": 4
+          },
+          {
+            "name": "Length",
+            "in": "formData",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 5
+          },
+          {
+            "name": "Name",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 6
+          },
+          {
+            "name": "FileName",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 7
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/platforms": {
       "get": {
         "tags": [
@@ -308,6 +391,24 @@
             }
           }
         ]
+      },
+      "IHeaderDictionary": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "Item": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ContentLength": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        }
       },
       "PlatformViewModel": {
         "type": "object",
