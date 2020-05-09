@@ -24,23 +24,9 @@ namespace api.Commands.Handlers
 
             if (exists == null)
             {
-                var game = new Game
-                {
-                    Name = request.Name.Trim(),
-                    Description = request.Description?.Trim()
-                };
+                var game = RegisterGame(request);
 
-                _context.Add(game);
-
-                var platformGame = new PlatformGame()
-                {
-                    GameId = game.Id,
-                    Code = request.Code,
-                    PlatformId = request.Platform,
-                    Registered = DateTime.UtcNow
-                };
-
-                _context.Add(platformGame);
+                var platformGame = RegisterGameWithPlatform(request, game);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
@@ -56,6 +42,49 @@ namespace api.Commands.Handlers
             }
 
             return null;
+        }
+
+        private PlatformGame RegisterGameWithPlatform(RegisterGame request, Game game)
+        {
+            var existing =
+                _context.PlatformGames.SingleOrDefault(pg => pg.GameId == game.Id && pg.PlatformId == request.Platform);
+
+            if (existing == null)
+            {
+                var platformGame = new PlatformGame()
+                {
+                    GameId = game.Id,
+                    Code = request.Code,
+                    PlatformId = request.Platform,
+                    Registered = DateTime.UtcNow
+                };
+
+                _context.Add(platformGame);
+
+                return platformGame;
+            }
+
+            return existing;
+        }
+
+        private Game RegisterGame(RegisterGame request)
+        {
+            var existing = _context.Games.SingleOrDefault(g => g.Name == request.Name.Trim());
+
+            if (existing == null)
+            {
+                var game = new Game
+                {
+                    Name = request.Name.Trim(),
+                    Description = request.Description?.Trim()
+                };
+
+                _context.Add(game);
+
+                return game;
+            }
+
+            return existing;
         }
     }
 }
