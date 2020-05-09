@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using api.Commands;
+using api.Infrastructure;
 using api.Models;
 using api.Query;
 using api.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -76,6 +79,15 @@ namespace api.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpGet, Route("images/{id}")]
+        public async Task<IEnumerable<string>> GetImagesForGame(Guid id)
+        {
+            var paths = from x in await _mediator.Send(new GetImageIdentifiersForGame { Id = id })
+                        select $"{HttpContext.Request.GetHost()}/images/{x}";
+
+            return paths; 
         }
     }
 }

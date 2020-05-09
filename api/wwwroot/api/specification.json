@@ -180,6 +180,41 @@
         }
       }
     },
+    "/games/images/{id}": {
+      "get": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_GetImagesForGame",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/images/{id}": {
       "post": {
         "tags": [
@@ -259,6 +294,50 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Images"
+        ],
+        "operationId": "Images_GetImage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "default": 150,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ImageSize"
+                }
+              ]
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         }
       }
@@ -409,6 +488,22 @@
             "nullable": true
           }
         }
+      },
+      "ImageSize": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Thumb",
+          "Small",
+          "Medium",
+          "Large"
+        ],
+        "enum": [
+          50,
+          150,
+          300,
+          600
+        ]
       },
       "PlatformViewModel": {
         "type": "object",
