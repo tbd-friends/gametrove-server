@@ -32,7 +32,7 @@ namespace api.Commands.Handlers
 
                 return new GameViewModel
                 {
-                    Id = game.Id,
+                    Id = platformGame.Id,
                     Name = game.Name,
                     Description = game.Description,
                     Code = request.Code,
