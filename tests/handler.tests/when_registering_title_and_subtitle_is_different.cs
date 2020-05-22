@@ -6,9 +6,9 @@ using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
 using GameTrove.Application.ViewModels;
+using GameTrove.Storage.Contracts;
+using GameTrove.Storage.Models;
 using Moq;
-using storage.Models;
-using storage.Repositories;
 using Xunit;
 
 namespace handler.tests

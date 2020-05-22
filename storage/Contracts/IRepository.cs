@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using storage.Models;
+using GameTrove.Storage.Models;
 
-namespace storage
+namespace GameTrove.Storage.Contracts
 {
     public interface IRepository<TEntity> where TEntity : class
     {

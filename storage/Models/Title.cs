@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace storage.Models
+namespace GameTrove.Storage.Models
 {
     public class Title
     {

@@ -1,6 +1,6 @@
-﻿using storage.Models;
+﻿using GameTrove.Storage.Models;
 
-namespace storage.Repositories
+namespace GameTrove.Storage.Contracts
 {
     public interface ITitleRepository : IRepository<Title>
     {
