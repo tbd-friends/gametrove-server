@@ -1,4 +1,6 @@
-using System;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using FluentAssertions;
 using GameTrove.Application.Commands;
@@ -11,17 +13,18 @@ using Xunit;
 
 namespace handler.tests
 {
-    public class when_registering_title_and_title_does_not_exist
+    public class when_registering_title_and_subtitle_is_different
     {
         private RegisterTitleHandler _subject;
         private TitleViewModel _result;
 
-        private const string TitleName = "Game Title";
-        private const string TitleSubtitle = "Subtitle for Game";
+        private const string TitleName = "TitleName";
+        private const string TitleSubtitle = "SubtitleOfTitle";
+        private const string OtherSubtitle = "OtherSubtitle";
 
         private Mock<ITitleRepository> _titleRepository;
 
-        public when_registering_title_and_title_does_not_exist()
+        public when_registering_title_and_subtitle_is_different()
         {
             Arrange();
 
@@ -32,6 +35,10 @@ namespace handler.tests
         {
             _titleRepository = new Mock<ITitleRepository>();
 
+            _titleRepository.Setup(repo => repo.Query(It.IsAny<Expression<Func<Title, bool>>>()))
+                .Returns((Expression<Func<Title, bool>> expr) =>
+                    new[] { new Title { Name = TitleName, Subtitle = TitleSubtitle } }.AsQueryable().Where(expr));
+
             _subject = new RegisterTitleHandler(_titleRepository.Object);
         }
 
@@ -40,7 +47,7 @@ namespace handler.tests
             _result = _subject.Handle(new RegisterTitle
             {
                 Name = TitleName,
-                Subtitle = TitleSubtitle
+                Subtitle = OtherSubtitle
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
@@ -49,14 +56,14 @@ namespace handler.tests
         {
             _result.Should().NotBeNull();
             _result.Name.Should().Be(TitleName);
-            _result.Subtitle.Should().Be(TitleSubtitle);
+            _result.Subtitle.Should().Be(OtherSubtitle);
         }
 
         [Fact]
-        public void title_is_created()
+        public void new_title_is_created()
         {
             _titleRepository.Verify(repo =>
-                repo.Add(It.Is<Title>(x => x.Name == TitleName && x.Subtitle == TitleSubtitle)));
+                repo.Add(It.Is<Title>(t => t.Name == TitleName && t.Subtitle == OtherSubtitle)));
         }
     }
 }

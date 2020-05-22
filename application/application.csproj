@@ -9,4 +9,8 @@
     <PackageReference Include="MediatR" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\storage\storage.csproj" />
+  </ItemGroup>
+
 </Project>

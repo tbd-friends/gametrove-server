@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 
-namespace GameTrove.Application.ViewModels
+namespace storage.Models
 {
-    public class TitleViewModel
+    public class Title
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

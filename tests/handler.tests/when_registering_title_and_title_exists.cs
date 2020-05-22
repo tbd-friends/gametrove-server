@@ -1,5 +1,8 @@
-using System;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
@@ -11,17 +14,17 @@ using Xunit;
 
 namespace handler.tests
 {
-    public class when_registering_title_and_title_does_not_exist
+    public class when_registering_title_and_title_exists
     {
         private RegisterTitleHandler _subject;
         private TitleViewModel _result;
 
-        private const string TitleName = "Game Title";
-        private const string TitleSubtitle = "Subtitle for Game";
+        private const string TitleName = "TitleName";
+        private const string TitleSubtitle = "SubtitleOfTitle";
 
         private Mock<ITitleRepository> _titleRepository;
 
-        public when_registering_title_and_title_does_not_exist()
+        public when_registering_title_and_title_exists()
         {
             Arrange();
 
@@ -31,6 +34,12 @@ namespace handler.tests
         private void Arrange()
         {
             _titleRepository = new Mock<ITitleRepository>();
+
+            _titleRepository.Setup(repo => repo.Query(It.IsAny<Expression<Func<Title, bool>>>())).Returns(new[]
+            {
+                new Title
+                    {Id = Guid.NewGuid(), Name = TitleName, Subtitle = TitleSubtitle}
+            }.AsQueryable());
 
             _subject = new RegisterTitleHandler(_titleRepository.Object);
         }
@@ -53,10 +62,9 @@ namespace handler.tests
         }
 
         [Fact]
-        public void title_is_created()
+        public void title_is_not_added()
         {
-            _titleRepository.Verify(repo =>
-                repo.Add(It.Is<Title>(x => x.Name == TitleName && x.Subtitle == TitleSubtitle)));
+            _titleRepository.Verify(repo => repo.Add(It.IsAny<Title>()), Times.Never);
         }
     }
 }
