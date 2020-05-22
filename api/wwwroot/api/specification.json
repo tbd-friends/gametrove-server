@@ -530,6 +530,10 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true
           }
         }
       }

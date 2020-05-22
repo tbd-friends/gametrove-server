@@ -29,11 +29,12 @@ namespace api.Query.Handlers
                           select new
                           {
                               Id = pg.Id,
-                              Name = $"{g.Name} ({p.Name})"
+                              Name = g.Name,
+                              Platform = p.Name
                           };
 
             return Task.FromResult(results
-                .Select(r => new SearchResultViewModel { Id = r.Id, Name = r.Name })
+                .Select(r => new SearchResultViewModel { Id = r.Id, Name = r.Name, Platform = r.Platform })
                 .AsEnumerable());
         }
     }
