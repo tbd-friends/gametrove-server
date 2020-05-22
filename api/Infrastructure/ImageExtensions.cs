@@ -24,7 +24,7 @@ namespace api.Infrastructure
             }
 
             using var resized =
-                original.Resize(new SKImageInfo(width, height), SKBitmapResizeMethod.Lanczos3);
+                original.Resize(new SKImageInfo(width, height), SKFilterQuality.High);
 
             if (resized == null) return null;
 

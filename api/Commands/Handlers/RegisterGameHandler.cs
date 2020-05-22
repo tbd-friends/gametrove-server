@@ -24,19 +24,19 @@ namespace api.Commands.Handlers
 
             if (exists == null)
             {
-                var game = RegisterGame(request);
+                var title = RegisterTitle(request);
 
-                var platformGame = RegisterGameWithPlatform(request, game);
+                var game = RegisterTitleWithPlatform(request, title);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
                 return new GameViewModel
                 {
-                    Id = platformGame.Id,
-                    Name = game.Name,
-                    Description = game.Description,
+                    Id = game.Id,
+                    Name = title.Name,
+                    Description = title.Description,
                     Code = request.Code,
-                    Registered = platformGame.Registered,
+                    Registered = game.Registered,
                     Platform = _context.Platforms.Single(p => p.Id == request.Platform).Name
                 };
             }
@@ -44,14 +44,14 @@ namespace api.Commands.Handlers
             return null;
         }
 
-        private PlatformGame RegisterGameWithPlatform(RegisterGame request, Game game)
+        private PlatformGame RegisterTitleWithPlatform(RegisterGame request, Game game)
         {
             var existing =
                 _context.PlatformGames.SingleOrDefault(pg => pg.GameId == game.Id && pg.PlatformId == request.Platform);
 
             if (existing == null)
             {
-                var platformGame = new PlatformGame()
+                var platformGame = new PlatformGame
                 {
                     GameId = game.Id,
                     Code = request.Code,
@@ -67,7 +67,7 @@ namespace api.Commands.Handlers
             return existing;
         }
 
-        private Game RegisterGame(RegisterGame request)
+        private Game RegisterTitle(RegisterGame request)
         {
             var existing = _context.Games.SingleOrDefault(g => g.Name == request.Name.Trim());
 
