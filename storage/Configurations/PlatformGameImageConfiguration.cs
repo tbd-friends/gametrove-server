@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GameTrove.Storage.Configurations
 {
-    public class PlatformGameImageConfiguration : IEntityTypeConfiguration<PlatformGameImage>
+    public class PlatformGameImageConfiguration : IEntityTypeConfiguration<GameImage>
     {
-        public void Configure(EntityTypeBuilder<PlatformGameImage> builder)
+        public void Configure(EntityTypeBuilder<GameImage> builder)
         {
             builder.Property(p => p.Id).HasDefaultValueSql("newid()");
         }

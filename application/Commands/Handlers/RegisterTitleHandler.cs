@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameTrove.Application.ViewModels;
 using GameTrove.Storage.Contracts;
-using GameTrove.Storage.Models;
 using MediatR;
 
 namespace GameTrove.Application.Commands.Handlers

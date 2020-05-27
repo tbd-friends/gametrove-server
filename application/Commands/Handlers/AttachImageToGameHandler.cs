@@ -33,10 +33,10 @@ namespace GameTrove.Application.Commands.Handlers
 
                 await request.Content.CopyToAsync(fileStream, cancellationToken);
 
-                _context.Add(new PlatformGameImage
+                _context.Add(new GameImage
                 {
                     FileName = request.FileName.PrepareFileName(),
-                    PlatformGameId = request.Id
+                    GameId = request.Id
                 });
 
                 await _context.SaveChangesAsync(cancellationToken);

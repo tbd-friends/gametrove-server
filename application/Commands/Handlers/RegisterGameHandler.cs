@@ -20,7 +20,7 @@ namespace GameTrove.Application.Commands.Handlers
 
         public async Task<GameViewModel> Handle(RegisterGame request, CancellationToken cancellationToken)
         {
-            var exists = _context.PlatformGames.SingleOrDefault(g => g.Code == request.Code);
+            var exists = _context.Games.SingleOrDefault(g => g.Code == request.Code);
 
             if (exists == null)
             {
@@ -34,7 +34,7 @@ namespace GameTrove.Application.Commands.Handlers
                 {
                     Id = game.Id,
                     Name = title.Name,
-                    Description = title.Description,
+                    Description = title.Subtitle,
                     Code = request.Code,
                     Registered = game.Registered,
                     Platform = _context.Platforms.Single(p => p.Id == request.Platform).Name
@@ -44,16 +44,16 @@ namespace GameTrove.Application.Commands.Handlers
             return null;
         }
 
-        private PlatformGame RegisterTitleWithPlatform(RegisterGame request, Game game)
+        private Game RegisterTitleWithPlatform(RegisterGame request, Title title)
         {
             var existing =
-                _context.PlatformGames.SingleOrDefault(pg => pg.GameId == game.Id && pg.PlatformId == request.Platform);
+                _context.Games.SingleOrDefault(pg => pg.TitleId == title.Id && pg.PlatformId == request.Platform);
 
             if (existing == null)
             {
-                var platformGame = new PlatformGame
+                var platformGame = new Game
                 {
-                    GameId = game.Id,
+                    TitleId = title.Id,
                     Code = request.Code,
                     PlatformId = request.Platform,
                     Registered = DateTime.UtcNow
@@ -67,16 +67,16 @@ namespace GameTrove.Application.Commands.Handlers
             return existing;
         }
 
-        private Game RegisterTitle(RegisterGame request)
+        private Title RegisterTitle(RegisterGame request)
         {
-            var existing = _context.Games.SingleOrDefault(g => g.Name == request.Name.Trim());
+            var existing = _context.Titles.SingleOrDefault(g => g.Name == request.Name.Trim());
 
             if (existing == null)
             {
-                var game = new Game
+                var game = new Title
                 {
                     Name = request.Name.Trim(),
-                    Description = request.Description?.Trim()
+                    Subtitle = request.Description?.Trim()
                 };
 
                 _context.Add(game);

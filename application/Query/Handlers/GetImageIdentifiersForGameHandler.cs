@@ -21,7 +21,7 @@ namespace GameTrove.Application.Query.Handlers
         {
             return Task.FromResult(
                 _context.PlatformGameImages
-                    .Where(pgi => pgi.PlatformGameId == request.Id)
+                    .Where(pgi => pgi.GameId == request.Id)
                     .Select(pgi => pgi.Id)
                     .AsEnumerable());
         }

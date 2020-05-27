@@ -19,17 +19,17 @@ namespace GameTrove.Application.Query.Handlers
 
         public Task<IEnumerable<GameViewModel>> Handle(RetrieveRecentlyAddedGames request, CancellationToken cancellationToken)
         {
-            var recentlyAddedGames = _context.PlatformGames.OrderByDescending(g => g.Registered);
+            var recentlyAddedGames = _context.Games.OrderByDescending(g => g.Registered);
 
             return Task.FromResult((from x in recentlyAddedGames.Take(request.Limit)
                                     join p in _context.Platforms on x.PlatformId equals p.Id
-                                    join g in _context.Games on x.GameId equals g.Id
+                                    join t in _context.Titles on x.TitleId equals t.Id
                                     select new GameViewModel
                                     {
                                         Id = x.Id,
-                                        Name = g.Name,
+                                        Name = t.Name,
                                         Code = x.Code,
-                                        Description = g.Description,
+                                        Description = t.Subtitle,
                                         Registered = x.Registered,
                                         Platform = p.Name
                                     }).AsEnumerable());

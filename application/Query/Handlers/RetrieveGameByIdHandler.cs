@@ -18,16 +18,16 @@ namespace GameTrove.Application.Query.Handlers
 
         public Task<GameViewModel> Handle(RetrieveGameById request, CancellationToken cancellationToken)
         {
-            var result = (from pg in _context.PlatformGames
+            var result = (from pg in _context.Games
                           join p in _context.Platforms on pg.PlatformId equals p.Id
-                          join g in _context.Games on pg.GameId equals g.Id
+                          join t in _context.Titles on pg.TitleId equals t.Id
                           where pg.Id == request.Id
                           select new GameViewModel
                           {
                               Id = pg.Id,
                               Code = pg.Code,
-                              Description = g.Description,
-                              Name = g.Name,
+                              Description = t.Subtitle,
+                              Name = t.Name,
                               Registered = pg.Registered,
                               Platform = p.Name
                           }).SingleOrDefault();

@@ -2,10 +2,10 @@
 
 namespace GameTrove.Storage.Models
 {
-    public class PlatformGameImage
+    public class GameImage
     {
         public Guid Id { get; set; }
-        public Guid PlatformGameId { get; set; }
+        public Guid GameId { get; set; }
         public string FileName { get; set; }
         public bool IsCoverArt { get; set; }
     }

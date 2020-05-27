@@ -19,29 +19,29 @@ namespace GameTrove.Application.Commands.Handlers
 
         public async Task<GameViewModel> Handle(UpdateGame request, CancellationToken cancellationToken)
         {
-            var result = await (from pg in _context.PlatformGames
-                                join g in _context.Games on pg.GameId equals g.Id
+            var result = await (from pg in _context.Games
+                                join t in _context.Titles on pg.TitleId equals t.Id
                                 where pg.Id == request.Id
                                 select new
                                 {
-                                    Game = g,
+                                    Title = t,
                                     PlatformInfo = pg
                                 }).SingleOrDefaultAsync(cancellationToken);
 
             if (result != null)
             {
-                result.Game.Name = request.Name;
-                result.Game.Description = request.Description;
+                result.Title.Name = request.Name;
+                result.Title.Subtitle = request.Description;
 
-                _context.Update(result.Game);
+                _context.Update(result.Title);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
                 return new GameViewModel
                 {
                     Id = request.Id,
-                    Name = result.Game.Name,
-                    Description = result.Game.Description,
+                    Name = result.Title.Name,
+                    Description = result.Title.Subtitle,
                     Code = result.PlatformInfo.Code,
                     Registered = result.PlatformInfo.Registered
                 };

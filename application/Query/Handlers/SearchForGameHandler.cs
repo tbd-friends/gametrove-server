@@ -19,15 +19,15 @@ namespace GameTrove.Application.Query.Handlers
 
         public Task<IEnumerable<SearchResultViewModel>> Handle(SearchForGame request, CancellationToken cancellationToken)
         {
-            var results = from g in _context.Games
-                          join pg in _context.PlatformGames on g.Id equals pg.GameId
+            var results = from t in _context.Titles
+                          join pg in _context.Games on t.Id equals pg.TitleId
                           join p in _context.Platforms on pg.PlatformId equals p.Id
-                          where g.Name.Contains(request.Text)
-                          orderby g.Name
+                          where t.Name.Contains(request.Text)
+                          orderby t.Name
                           select new
                           {
                               Id = pg.Id,
-                              Name = g.Name,
+                              Name = t.Name,
                               Platform = p.Name
                           };
 

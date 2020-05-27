@@ -5,10 +5,11 @@ namespace GameTrove.Storage
 {
     public class GameTrackerContext : DbContext
     {
+        public DbSet<Title> Titles{ get; set; }
         public DbSet<Game> Games { get; set; }
+        
         public DbSet<Platform> Platforms { get; set; }
-        public DbSet<PlatformGame> PlatformGames { get; set; }
-        public DbSet<PlatformGameImage> PlatformGameImages { get; set; }
+        public DbSet<GameImage> PlatformGameImages { get; set; }
 
         public GameTrackerContext(DbContextOptions<GameTrackerContext> options) : base(options)
         {
