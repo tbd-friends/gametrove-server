@@ -30,7 +30,7 @@ namespace api.Controllers
             var result = await _mediator.Send(new RegisterGame
             {
                 Name = model.Name,
-                Description = model.Description,
+                Subtitle = model.Description,
                 Code = model.Code,
                 Platform = model.Platform
             });

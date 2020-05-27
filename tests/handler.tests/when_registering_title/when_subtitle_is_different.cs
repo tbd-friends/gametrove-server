@@ -1,30 +1,27 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
 using GameTrove.Application.ViewModels;
-using GameTrove.Storage.Contracts;
+using GameTrove.Storage;
 using GameTrove.Storage.Models;
-using Moq;
+using handler.tests.Infrastructure;
 using Xunit;
 
-namespace handler.tests
+namespace handler.tests.when_registering_title
 {
-    public class when_registering_title_and_subtitle_is_different
+    public class when_subtitle_is_different : InMemoryContext<GameTrackerContext>
     {
         private RegisterTitleHandler _subject;
         private TitleViewModel _result;
-
+        
         private const string TitleName = "TitleName";
         private const string TitleSubtitle = "SubtitleOfTitle";
         private const string OtherSubtitle = "OtherSubtitle";
 
-        private Mock<ITitleRepository> _titleRepository;
-
-        public when_registering_title_and_subtitle_is_different()
+        public when_subtitle_is_different()
         {
             Arrange();
 
@@ -33,18 +30,11 @@ namespace handler.tests
 
         private void Arrange()
         {
-            _titleRepository = new Mock<ITitleRepository>();
+            Context.Titles.Add(new Title() { Name = TitleName, Subtitle = TitleSubtitle });
 
-            _titleRepository.Setup(repo => repo.Query(It.IsAny<Expression<Func<Title, bool>>>()))
-                .Returns((Expression<Func<Title, bool>> expr) =>
-                    new[] { new Title { Name = TitleName, Subtitle = TitleSubtitle } }.AsQueryable().Where(expr));
+            Context.SaveChanges();
 
-            _titleRepository
-                .Setup(repo =>
-                    repo.AddTitle(TitleName, OtherSubtitle))
-                .Returns(new Title { Id = Guid.NewGuid(), Name = TitleName, Subtitle = OtherSubtitle });
-
-            _subject = new RegisterTitleHandler(_titleRepository.Object);
+            _subject = new RegisterTitleHandler(Context);
         }
 
         private void Act()
@@ -67,8 +57,9 @@ namespace handler.tests
         [Fact]
         public void new_title_is_created()
         {
-            _titleRepository.Verify(repo =>
-                repo.AddTitle(It.Is<string>(t => t == TitleName), It.Is<string>(t => t == OtherSubtitle)));
+            Context.Titles.Count().Should().Be(2);
+            Context.Titles
+                .SingleOrDefault(t => t.Name == TitleName && t.Subtitle == OtherSubtitle).Should().NotBeNull();
         }
     }
 }

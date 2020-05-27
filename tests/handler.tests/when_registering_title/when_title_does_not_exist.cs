@@ -1,17 +1,19 @@
 using System;
+using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
 using GameTrove.Application.ViewModels;
-using GameTrove.Storage.Contracts;
+using GameTrove.Storage;
 using GameTrove.Storage.Models;
+using handler.tests.Infrastructure;
 using Moq;
 using Xunit;
 
-namespace handler.tests
+namespace handler.tests.when_registering_title
 {
-    public class when_registering_title_and_title_does_not_exist
+    public class when_title_does_not_exist : InMemoryContext<GameTrackerContext>
     {
         private RegisterTitleHandler _subject;
         private TitleViewModel _result;
@@ -19,9 +21,7 @@ namespace handler.tests
         private const string TitleName = "Game Title";
         private const string TitleSubtitle = "Subtitle for Game";
 
-        private Mock<ITitleRepository> _titleRepository;
-
-        public when_registering_title_and_title_does_not_exist()
+        public when_title_does_not_exist()
         {
             Arrange();
 
@@ -30,16 +30,7 @@ namespace handler.tests
 
         private void Arrange()
         {
-            _titleRepository = new Mock<ITitleRepository>();
-
-            _titleRepository.Setup(repo => repo.AddTitle(TitleName, TitleSubtitle)).Returns(new Title()
-            {
-                Id = Guid.NewGuid(),
-                Name = TitleName,
-                Subtitle = TitleSubtitle
-            });
-
-            _subject = new RegisterTitleHandler(_titleRepository.Object);
+            _subject = new RegisterTitleHandler(Context);
         }
 
         private void Act()
@@ -62,8 +53,9 @@ namespace handler.tests
         [Fact]
         public void title_is_created()
         {
-            _titleRepository.Verify(repo =>
-                repo.AddTitle(TitleName, TitleSubtitle), Times.Once);
+            Context.Titles
+                .SingleOrDefault(t => t.Name == TitleName && t.Subtitle == TitleSubtitle).Should()
+                .NotBeNull();
         }
     }
 }

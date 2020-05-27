@@ -1,7 +1,5 @@
 using GameTrove.Application.Commands;
 using GameTrove.Storage;
-using GameTrove.Storage.Contracts;
-using GameTrove.Storage.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,8 +25,6 @@ namespace api
             services.AddControllers();
             services.AddDbContextPool<GameTrackerContext>(sql =>
                 sql.UseSqlServer(Configuration.GetConnectionString("gametracker")));
-
-            services.AddTransient<ITitleRepository, TitleRepository>();
 
             services.AddMediatR(typeof(RegisterGame).Assembly);
 

@@ -2,19 +2,19 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
 using GameTrove.Application.ViewModels;
-using GameTrove.Storage.Contracts;
+using GameTrove.Storage;
 using GameTrove.Storage.Models;
+using handler.tests.Infrastructure;
 using Moq;
 using Xunit;
 
-namespace handler.tests
+namespace handler.tests.when_registering_title
 {
-    public class when_registering_title_and_title_exists
+    public class when_title_exists : InMemoryContext<GameTrackerContext>
     {
         private RegisterTitleHandler _subject;
         private TitleViewModel _result;
@@ -22,9 +22,7 @@ namespace handler.tests
         private const string TitleName = "TitleName";
         private const string TitleSubtitle = "SubtitleOfTitle";
 
-        private Mock<ITitleRepository> _titleRepository;
-
-        public when_registering_title_and_title_exists()
+        public when_title_exists()
         {
             Arrange();
 
@@ -33,15 +31,10 @@ namespace handler.tests
 
         private void Arrange()
         {
-            _titleRepository = new Mock<ITitleRepository>();
+            Context.Titles.Add(new Title { Name = TitleName, Subtitle = TitleSubtitle });
+            Context.SaveChanges();
 
-            _titleRepository.Setup(repo => repo.Query(It.IsAny<Expression<Func<Title, bool>>>())).Returns(new[]
-            {
-                new Title
-                    {Id = Guid.NewGuid(), Name = TitleName, Subtitle = TitleSubtitle}
-            }.AsQueryable());
-
-            _subject = new RegisterTitleHandler(_titleRepository.Object);
+            _subject = new RegisterTitleHandler(Context);
         }
 
         private void Act()
@@ -64,7 +57,7 @@ namespace handler.tests
         [Fact]
         public void title_is_not_added()
         {
-            _titleRepository.Verify(repo => repo.AddTitle(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            Context.Titles.Count(t => t.Name == TitleName && t.Subtitle == TitleSubtitle).Should().Be(1);
         }
     }
 }
