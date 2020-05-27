@@ -2,35 +2,22 @@
 using System.Linq;
 using System.Linq.Expressions;
 using GameTrove.Storage.Contracts;
-using GameTrove.Storage.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameTrove.Storage.Repositories
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected Repository() // Context comes in here
+        protected DbContext Context { get; }
+
+        protected Repository(DbContext context)
         {
-            
+            Context = context;
         }
 
-        public void Add(TEntity entity)
+        public virtual IQueryable<TEntity> Query(Expression<Func<TEntity, bool>> query)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<TEntity> Query(Expression<Func<Title, bool>> expression)
-        {
-            throw new NotImplementedException(); 
+            return Context.Set<TEntity>().Where(query);
         }
     }
 }

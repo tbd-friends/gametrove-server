@@ -64,7 +64,7 @@ namespace handler.tests
         [Fact]
         public void title_is_not_added()
         {
-            _titleRepository.Verify(repo => repo.Add(It.IsAny<Title>()), Times.Never);
+            _titleRepository.Verify(repo => repo.AddTitle(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

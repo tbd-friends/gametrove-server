@@ -39,6 +39,11 @@ namespace handler.tests
                 .Returns((Expression<Func<Title, bool>> expr) =>
                     new[] { new Title { Name = TitleName, Subtitle = TitleSubtitle } }.AsQueryable().Where(expr));
 
+            _titleRepository
+                .Setup(repo =>
+                    repo.AddTitle(TitleName, OtherSubtitle))
+                .Returns(new Title { Id = Guid.NewGuid(), Name = TitleName, Subtitle = OtherSubtitle });
+
             _subject = new RegisterTitleHandler(_titleRepository.Object);
         }
 
@@ -63,7 +68,7 @@ namespace handler.tests
         public void new_title_is_created()
         {
             _titleRepository.Verify(repo =>
-                repo.Add(It.Is<Title>(t => t.Name == TitleName && t.Subtitle == OtherSubtitle)));
+                repo.AddTitle(It.Is<string>(t => t == TitleName), It.Is<string>(t => t == OtherSubtitle)));
         }
     }
 }

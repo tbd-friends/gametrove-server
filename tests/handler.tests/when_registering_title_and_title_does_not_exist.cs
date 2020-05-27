@@ -32,6 +32,13 @@ namespace handler.tests
         {
             _titleRepository = new Mock<ITitleRepository>();
 
+            _titleRepository.Setup(repo => repo.AddTitle(TitleName, TitleSubtitle)).Returns(new Title()
+            {
+                Id = Guid.NewGuid(),
+                Name = TitleName,
+                Subtitle = TitleSubtitle
+            });
+
             _subject = new RegisterTitleHandler(_titleRepository.Object);
         }
 
@@ -56,7 +63,7 @@ namespace handler.tests
         public void title_is_created()
         {
             _titleRepository.Verify(repo =>
-                repo.Add(It.Is<Title>(x => x.Name == TitleName && x.Subtitle == TitleSubtitle)));
+                repo.AddTitle(TitleName, TitleSubtitle), Times.Once);
         }
     }
 }

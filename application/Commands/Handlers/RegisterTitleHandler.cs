@@ -19,18 +19,13 @@ namespace GameTrove.Application.Commands.Handlers
 
         public Task<TitleViewModel> Handle(RegisterTitle request, CancellationToken cancellationToken)
         {
-            var title = _repository.Query(x => x.Name == request.Name && x.Subtitle == request.Subtitle)
+            var title = _repository
+                .Query(x => x.Name == request.Name && x.Subtitle == request.Subtitle)
                 .SingleOrDefault();
 
             if (title == null)
             {
-                title = new Title()
-                {
-                    Name = request.Name,
-                    Subtitle = request.Subtitle
-                };
-
-                _repository.Add(title);
+                title = _repository.AddTitle(request.Name, request.Subtitle);
             }
 
             return Task.FromResult(new TitleViewModel
