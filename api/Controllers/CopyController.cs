@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
+using GameTrove.Application.Query;
+using GameTrove.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,16 +22,24 @@ namespace api.Controllers
         }
 
         [HttpPost("{id}")]
-        public async Task<bool> RegisterCopy(Guid id, RegisterCopyModel model)
+        public async Task<Guid> RegisterCopy(Guid id, RegisterCopyModel model)
         {
-            await _mediator.Send(new RegisterCopy
+            return await _mediator.Send(new RegisterCopy
             {
                 GameId = id,
                 Tags = model.Tags,
-                Cost = model.Cost
+                Cost = model.Cost,
+                Purchased = model.Purchased
             });
+        }
 
-            return true;
+        [HttpGet("{id}")]
+        public async Task<IEnumerable<CopyViewModel>> GetCopies(Guid id)
+        {
+            return await _mediator.Send(new GetCopies
+            {
+                GameId = id
+            });
         }
     }
 }

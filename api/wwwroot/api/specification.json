@@ -42,7 +42,41 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Copy"
+        ],
+        "operationId": "Copy_GetCopies",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CopyViewModel"
+                  }
                 }
               }
             }
@@ -460,6 +494,38 @@
           "cost": {
             "type": "number",
             "format": "decimal",
+            "nullable": true
+          },
+          "purchased": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CopyViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "cost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "purchased": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }

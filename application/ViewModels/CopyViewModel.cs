@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace GameTrove.Storage.Models
+namespace GameTrove.Application.ViewModels
 {
-    public class Copy
+    public class CopyViewModel
     {
         public Guid Id { get; set; }
-        public Guid GameId { get; set; }
-        public string Tags { get; set; }
+        public string[] Tags { get; set; }
         public decimal? Cost { get; set; }
         public DateTime? Purchased { get; set; }
     }
