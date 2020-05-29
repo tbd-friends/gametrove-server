@@ -6,6 +6,50 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/copies/{id}": {
+      "post": {
+        "tags": [
+          "Copy"
+        ],
+        "operationId": "Copy_RegisterCopy",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterCopyModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/games": {
       "post": {
         "tags": [
@@ -402,6 +446,24 @@
   },
   "components": {
     "schemas": {
+      "RegisterCopyModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "cost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          }
+        }
+      },
       "GameModel": {
         "type": "object",
         "additionalProperties": false,
