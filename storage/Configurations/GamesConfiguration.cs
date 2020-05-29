@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GameTrove.Storage.Configurations
 {
-    public class PlatformGamesConfiguration : IEntityTypeConfiguration<Game>
+    public class GamesConfiguration : IEntityTypeConfiguration<Game>
     {
         public void Configure(EntityTypeBuilder<Game> builder)
         {
