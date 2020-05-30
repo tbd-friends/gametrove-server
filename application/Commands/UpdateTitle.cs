@@ -4,10 +4,10 @@ using MediatR;
 
 namespace GameTrove.Application.Commands
 {
-    public class UpdateGame : IRequest<GameViewModel>
+    public class UpdateTitle : IRequest<TitleViewModel>
     {
-        public Guid Id { get; set; }
+        public Guid TitleId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string Subtitle { get; set; }
     }
 }

@@ -46,17 +46,15 @@ namespace api.Controllers
             return result != null ? new ActionResult<GameViewModel>(result) : NotFound();
         }
 
-        [HttpPut, Route("{id}")]
-        public async Task<ActionResult<GameViewModel>> UpdateGame(UpdateGameModel model)
+        [HttpGet("{id}/title")]
+        public async Task<ActionResult<TitleViewModel>> GetTitleForGame(Guid id)
         {
-            var result = await _mediator.Send(new UpdateGame
+            var result = await _mediator.Send(new GetTitleForGame
             {
-                Id = model.Id,
-                Name = model.Name,
-                Description = model.Description
+                GameId = id
             });
 
-            return result != null ? new ActionResult<GameViewModel>(result) : BadRequest();
+            return result != null ? new ActionResult<TitleViewModel>(result) : BadRequest();
         }
 
         [HttpGet, Route("last/{count}")]
@@ -87,7 +85,7 @@ namespace api.Controllers
             var paths = from x in await _mediator.Send(new GetImageIdentifiersForGame { Id = id })
                         select $"{HttpContext.Request.GetHost()}/images/{x}";
 
-            return paths; 
+            return paths;
         }
     }
 }
