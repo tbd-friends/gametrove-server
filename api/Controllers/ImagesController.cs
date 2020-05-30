@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using api.Commands;
 using api.Infrastructure;
-using api.Query;
+using GameTrove.Application.Commands;
+using GameTrove.Application.Query;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

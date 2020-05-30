@@ -6,6 +6,84 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/copies/{id}": {
+      "post": {
+        "tags": [
+          "Copy"
+        ],
+        "operationId": "Copy_RegisterCopy",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterCopyModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Copy"
+        ],
+        "operationId": "Copy_GetCopies",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CopyViewModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/games": {
       "post": {
         "tags": [
@@ -69,42 +147,33 @@
             }
           }
         }
-      },
-      "put": {
+      }
+    },
+    "/games/{id}/title": {
+      "get": {
         "tags": [
           "Game"
         ],
-        "operationId": "Game_UpdateGame",
+        "operationId": "Game_GetTitleForGame",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "guid"
             },
-            "x-position": 2
+            "x-position": 1
           }
         ],
-        "requestBody": {
-          "x-name": "model",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateGameModel"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameViewModel"
+                  "$ref": "#/components/schemas/TitleViewModel"
                 }
               }
             }
@@ -398,10 +467,104 @@
           }
         }
       }
+    },
+    "/titles/{id}": {
+      "put": {
+        "tags": [
+          "Title"
+        ],
+        "operationId": "Title_UpdateTitle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TitleModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TitleViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "RegisterCopyModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "cost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "purchased": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CopyViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "cost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "purchased": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
       "GameModel": {
         "type": "object",
         "additionalProperties": false,
@@ -454,22 +617,23 @@
           }
         }
       },
-      "UpdateGameModel": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/GameModel"
+      "TitleViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
           },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "string",
-                "format": "guid"
-              }
-            }
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subtitle": {
+            "type": "string",
+            "nullable": true
           }
-        ]
+        }
       },
       "IHeaderDictionary": {
         "type": "object",
@@ -528,6 +692,24 @@
             "format": "guid"
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TitleModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subtitle": {
             "type": "string",
             "nullable": true
           }

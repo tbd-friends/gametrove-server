@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using api.Query;
-using api.ViewModels;
+using GameTrove.Application.Query;
+using GameTrove.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
