@@ -30,7 +30,7 @@ namespace api.Controllers
             var result = await _mediator.Send(new RegisterGame
             {
                 Name = model.Name,
-                Subtitle = model.Description,
+                Subtitle = model.Subtitle,
                 Code = model.Code,
                 Platform = model.Platform
             });
@@ -55,6 +55,28 @@ namespace api.Controllers
             });
 
             return result != null ? new ActionResult<TitleViewModel>(result) : BadRequest();
+        }
+
+        [HttpPost("favorite/{id}")]
+        public async Task<IActionResult> FavoriteGame(Guid id)
+        {
+            await _mediator.Send(new FavoriteGame
+            {
+                GameId = id
+            });
+
+            return Ok();
+        }
+
+        [HttpDelete("favorite/{id}")]
+        public async Task<IActionResult> UnfavoriteGame(Guid id)
+        {
+            await _mediator.Send(new UnfavoriteGame
+            {
+                GameId = id
+            });
+
+            return Ok();
         }
 
         [HttpGet, Route("last/{count}")]

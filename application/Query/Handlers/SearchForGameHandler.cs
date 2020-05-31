@@ -28,11 +28,18 @@ namespace GameTrove.Application.Query.Handlers
                           {
                               Id = pg.Id,
                               Name = t.Name,
-                              Platform = p.Name
+                              Platform = p.Name,
+                              IsFavorite = pg.IsFavorite
                           };
 
             return Task.FromResult(results
-                .Select(r => new SearchResultViewModel { Id = r.Id, Name = r.Name, Platform = r.Platform })
+                .Select(r => new SearchResultViewModel
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Platform = r.Platform,
+                    IsFavorite = r.IsFavorite
+                })
                 .AsEnumerable());
         }
     }

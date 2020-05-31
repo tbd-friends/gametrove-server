@@ -9,5 +9,6 @@ namespace GameTrove.Storage.Models
         public Guid PlatformId { get; set; }
         public string Code { get; set; }
         public DateTime Registered { get; set; }
+        public bool IsFavorite { get; set; }
     }
 }

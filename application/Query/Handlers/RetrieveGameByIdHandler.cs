@@ -26,10 +26,11 @@ namespace GameTrove.Application.Query.Handlers
                           {
                               Id = pg.Id,
                               Code = pg.Code,
-                              Description = t.Subtitle,
+                              Subtitle = t.Subtitle,
                               Name = t.Name,
                               Registered = pg.Registered,
-                              Platform = p.Name
+                              Platform = p.Name,
+                              IsFavorite = pg.IsFavorite
                           }).SingleOrDefault();
 
             return Task.FromResult(result);

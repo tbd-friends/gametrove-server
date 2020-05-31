@@ -181,6 +181,70 @@
         }
       }
     },
+    "/games/favorite/{id}": {
+      "post": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_FavoriteGame",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_UnfavoriteGame",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/games/last/{count}": {
       "get": {
         "tags": [
@@ -573,7 +637,7 @@
             "type": "string",
             "nullable": true
           },
-          "description": {
+          "subtitle": {
             "type": "string",
             "nullable": true
           },
@@ -603,7 +667,7 @@
             "type": "string",
             "nullable": true
           },
-          "description": {
+          "subtitle": {
             "type": "string",
             "nullable": true
           },
@@ -614,6 +678,9 @@
           "platform": {
             "type": "string",
             "nullable": true
+          },
+          "isFavorite": {
+            "type": "boolean"
           }
         }
       },
@@ -698,6 +765,9 @@
           "platform": {
             "type": "string",
             "nullable": true
+          },
+          "isFavorite": {
+            "type": "boolean"
           }
         }
       },

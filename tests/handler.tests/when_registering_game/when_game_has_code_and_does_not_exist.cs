@@ -10,13 +10,12 @@ using GameTrove.Storage;
 using GameTrove.Storage.Models;
 using handler.tests.Infrastructure;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
 namespace handler.tests.when_registering_game
 {
-    public class when_game_does_not_exist : InMemoryContext<GameTrackerContext>
+    public class when_game_has_code_and_does_not_exist : InMemoryContext<GameTrackerContext>
     {
         private RegisterGameHandler _subject;
         private Mock<IMediator> _mediator;
@@ -29,7 +28,7 @@ namespace handler.tests.when_registering_game
         private const string Code = "ScannedCode";
         private const string PlatformName = "Platform";
 
-        public when_game_does_not_exist()
+        public when_game_has_code_and_does_not_exist()
         {
             Arrange();
 
@@ -86,7 +85,7 @@ namespace handler.tests.when_registering_game
         {
             _result.Should().NotBeNull();
             _result.Name.Should().Be(TitleName);
-            _result.Description.Should().Be(TitleSubtitle);
+            _result.Subtitle.Should().Be(TitleSubtitle);
             _result.Platform.Should().Be(PlatformName);
         }
     }

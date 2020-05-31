@@ -21,36 +21,47 @@ namespace GameTrove.Application.Commands.Handlers
 
         public async Task<GameViewModel> Handle(RegisterGame request, CancellationToken cancellationToken)
         {
-            var exists = _context.Games.SingleOrDefault(g => g.Code == request.Code);
+            var title = await _mediator.Send(
+                new RegisterTitle { Name = request.Name, Subtitle = request.Subtitle }, cancellationToken);
 
-            if (exists == null)
+            var exists = _context.Games.SingleOrDefault(g =>
+                (!string.IsNullOrEmpty(request.Code) && g.Code == request.Code) ||
+                (g.PlatformId == request.Platform && g.TitleId == title.Id)
+            );
+
+            if (exists != null)
             {
-                var title = await _mediator.Send(
-                    new RegisterTitle { Name = request.Name, Subtitle = request.Subtitle }, cancellationToken);
-
-                var game = new Game()
-                {
-                    TitleId = title.Id,
-                    PlatformId = request.Platform,
-                    Code = request.Code
-                };
-
-                _context.Games.Add(game);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
                 return new GameViewModel
                 {
-                    Id = game.Id,
+                    Id = exists.Id,
                     Name = title.Name,
-                    Description = title.Subtitle,
+                    Subtitle = title.Subtitle,
                     Platform = _context.Platforms.Single(p => p.Id == request.Platform).Name,
-                    Registered = game.Registered,
-                    Code = game.Code
-                };
+                    Registered = exists.Registered,
+                    Code = exists.Code
+                }; 
             }
 
-            return null;
+            var game = new Game()
+            {
+                TitleId = title.Id,
+                PlatformId = request.Platform,
+                Code = request.Code
+            };
+
+            _context.Games.Add(game);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return new GameViewModel
+            {
+                Id = game.Id,
+                Name = title.Name,
+                Subtitle = title.Subtitle,
+                Platform = _context.Platforms.Single(p => p.Id == request.Platform).Name,
+                Registered = game.Registered,
+                Code = game.Code
+            };
         }
     }
 }

@@ -29,9 +29,10 @@ namespace GameTrove.Application.Query.Handlers
                                         Id = x.Id,
                                         Name = t.Name,
                                         Code = x.Code,
-                                        Description = t.Subtitle,
+                                        Subtitle = t.Subtitle,
                                         Registered = x.Registered,
-                                        Platform = p.Name
+                                        Platform = p.Name,
+                                        IsFavorite = x.IsFavorite
                                     }).AsEnumerable());
         }
     }

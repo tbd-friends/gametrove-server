@@ -30,17 +30,19 @@ namespace GameTrove.Application.Query.Handlers
                                   Description = t.Subtitle,
                                   Registered = pg.Registered,
                                   Code = pg.Code,
-                                  Platform = p.Name
+                                  Platform = p.Name,
+                                  IsFavorite = pg.IsFavorite
                               }).SingleOrDefaultAsync(cancellationToken: cancellationToken);
 
             return game != null ? new GameViewModel
             {
                 Id = game.Id,
                 Code = game.Code,
-                Description = game.Description,
+                Subtitle = game.Description,
                 Name = game.Name,
                 Registered = game.Registered,
-                Platform = game.Platform
+                Platform = game.Platform,
+                IsFavorite = game.IsFavorite
             } : null;
         }
     }
