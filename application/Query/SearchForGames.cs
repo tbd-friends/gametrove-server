@@ -4,8 +4,9 @@ using MediatR;
 
 namespace GameTrove.Application.Query
 {
-    public class SearchForGame : IRequest<IEnumerable<SearchResultViewModel>>
+    public class SearchForGames : IRequest<IEnumerable<GameViewModel>>
     {
         public string Text { get; set; }
+        public int? MostRecentlyAdded { get; set; }
     }
 }

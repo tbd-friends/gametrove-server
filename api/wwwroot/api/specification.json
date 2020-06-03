@@ -199,42 +199,6 @@
         }
       }
     },
-    "/games/last/{count}": {
-      "get": {
-        "tags": [
-          "Game"
-        ],
-        "operationId": "Game_GetLastXGames",
-        "parameters": [
-          {
-            "name": "count",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 10
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GameViewModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/games/{id}/images": {
       "post": {
         "tags": [
@@ -499,22 +463,23 @@
       }
     },
     "/search/games": {
-      "get": {
+      "post": {
         "tags": [
           "Search"
         ],
         "operationId": "Search_SearchGames",
-        "parameters": [
-          {
-            "name": "text",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          }
-        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
@@ -523,7 +488,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SearchResultViewModel"
+                    "$ref": "#/components/schemas/GameViewModel"
                   }
                 }
               }
@@ -760,24 +725,18 @@
           }
         }
       },
-      "SearchResultViewModel": {
+      "SearchModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "name": {
+          "text": {
             "type": "string",
             "nullable": true
           },
-          "platform": {
-            "type": "string",
+          "mostRecentlyAdded": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
-          },
-          "isFavorite": {
-            "type": "boolean"
           }
         }
       },

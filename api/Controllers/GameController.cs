@@ -97,12 +97,6 @@ namespace api.Controllers
             return Ok();
         }
 
-        [HttpGet("last/{count}")]
-        public async Task<IEnumerable<GameViewModel>> GetLastXGames(int count = 10)
-        {
-            return await _mediator.Send(new RetrieveRecentlyAddedGames() { Limit = count });
-        }
-
         [HttpPost("{id}/images")]
         public async Task AddImageForGame(Guid id, [FromForm] IFormFile file)
         {

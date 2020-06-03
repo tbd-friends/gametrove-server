@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameTrove.Api.Models;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using MediatR;
@@ -18,10 +19,14 @@ namespace api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet, Route("games")]
-        public async Task<IEnumerable<SearchResultViewModel>> SearchGames(string text)
+        [HttpPost("games")]
+        public async Task<IEnumerable<GameViewModel>> SearchGames(SearchModel model)
         {
-            return await _mediator.Send(new SearchForGame() { Text = text });
+            return await _mediator.Send(new SearchForGames
+            {
+                Text = model.Text,
+                MostRecentlyAdded = model.MostRecentlyAdded
+            });
         }
     }
 }
