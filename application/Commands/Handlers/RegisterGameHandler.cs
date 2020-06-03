@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameTrove.Application.ViewModels;
@@ -39,13 +40,14 @@ namespace GameTrove.Application.Commands.Handlers
                     Platform = _context.Platforms.Single(p => p.Id == request.Platform).Name,
                     Registered = exists.Registered,
                     Code = exists.Code
-                }; 
+                };
             }
 
             var game = new Game()
             {
                 TitleId = title.Id,
                 PlatformId = request.Platform,
+                Registered = DateTime.UtcNow,
                 Code = request.Code
             };
 
