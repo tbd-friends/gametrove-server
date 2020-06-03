@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Infrastructure;
 using api.Models;
+using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -38,7 +40,7 @@ namespace api.Controllers
             return result != null ? (IActionResult)Created($"/games/codes/{result.Code}", result) : Conflict();
         }
 
-        [HttpGet, Route("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<GameViewModel>> GetGame(Guid id)
         {
             var result = await _mediator.Send(new RetrieveGameById() { Id = id });
@@ -46,46 +48,7 @@ namespace api.Controllers
             return result != null ? new ActionResult<GameViewModel>(result) : NotFound();
         }
 
-        [HttpGet("{id}/title")]
-        public async Task<ActionResult<TitleViewModel>> GetTitleForGame(Guid id)
-        {
-            var result = await _mediator.Send(new GetTitleForGame
-            {
-                GameId = id
-            });
-
-            return result != null ? new ActionResult<TitleViewModel>(result) : BadRequest();
-        }
-
-        [HttpPost("favorite/{id}")]
-        public async Task<IActionResult> FavoriteGame(Guid id)
-        {
-            await _mediator.Send(new FavoriteGame
-            {
-                GameId = id
-            });
-
-            return Ok();
-        }
-
-        [HttpDelete("favorite/{id}")]
-        public async Task<IActionResult> UnfavoriteGame(Guid id)
-        {
-            await _mediator.Send(new UnfavoriteGame
-            {
-                GameId = id
-            });
-
-            return Ok();
-        }
-
-        [HttpGet, Route("last/{count}")]
-        public async Task<IEnumerable<GameViewModel>> GetLastXGames(int count = 10)
-        {
-            return await _mediator.Send(new RetrieveRecentlyAddedGames() { Limit = count });
-        }
-
-        [HttpGet, Route("codes/{code}")]
+        [HttpGet("{code}")]
         public async Task<ActionResult<GameViewModel>> GetGameByCode(string code)
         {
             var game = await _mediator.Send(new RetrieveGameByCode
@@ -101,13 +64,84 @@ namespace api.Controllers
             return NotFound();
         }
 
-        [HttpGet, Route("images/{id}")]
+        [HttpGet("{id}/title")]
+        public async Task<ActionResult<TitleViewModel>> GetTitleForGame(Guid id)
+        {
+            var result = await _mediator.Send(new GetTitleForGame
+            {
+                GameId = id
+            });
+
+            return result != null ? new ActionResult<TitleViewModel>(result) : BadRequest();
+        }
+
+        [HttpPost("favorites")]
+        public async Task<IActionResult> FavoriteGame(FavoriteModel model)
+        {
+            await _mediator.Send(new FavoriteGame
+            {
+                GameId = model.GameId
+            });
+
+            return Ok();
+        }
+
+        [HttpDelete("favorites")]
+        public async Task<IActionResult> UnfavoriteGame(FavoriteModel model)
+        {
+            await _mediator.Send(new UnfavoriteGame
+            {
+                GameId = model.GameId
+            });
+
+            return Ok();
+        }
+
+        [HttpGet("last/{count}")]
+        public async Task<IEnumerable<GameViewModel>> GetLastXGames(int count = 10)
+        {
+            return await _mediator.Send(new RetrieveRecentlyAddedGames() { Limit = count });
+        }
+
+        [HttpPost("{id}/images")]
+        public async Task AddImageForGame(Guid id, [FromForm] IFormFile file)
+        {
+            await _mediator.Send(new AttachImageToGame
+            {
+                Id = id,
+                Content = file.OpenReadStream(),
+                FileName = file.FileName
+            });
+        }
+
+        [HttpGet("{id}/images")]
         public async Task<IEnumerable<string>> GetImagesForGame(Guid id)
         {
             var paths = from x in await _mediator.Send(new GetImageIdentifiersForGame { Id = id })
                         select $"{HttpContext.Request.GetHost()}/images/{x}";
 
             return paths;
+        }
+
+        [HttpPost("{id}/copies")]
+        public async Task<Guid> RegisterCopy(Guid id, RegisterCopyModel model)
+        {
+            return await _mediator.Send(new RegisterCopy
+            {
+                GameId = id,
+                Tags = model.Tags,
+                Cost = model.Cost,
+                Purchased = model.Purchased
+            });
+        }
+
+        [HttpGet("{id}/copies")]
+        public async Task<IEnumerable<CopyViewModel>> GetCopies(Guid id)
+        {
+            return await _mediator.Send(new GetCopies
+            {
+                GameId = id
+            });
         }
     }
 }

@@ -6,84 +6,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/copies/{id}": {
-      "post": {
-        "tags": [
-          "Copy"
-        ],
-        "operationId": "Copy_RegisterCopy",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "model",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterCopyModel"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "guid"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Copy"
-        ],
-        "operationId": "Copy_GetCopies",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CopyViewModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/games": {
       "post": {
         "tags": [
@@ -149,6 +71,38 @@
         }
       }
     },
+    "/games/{code}": {
+      "get": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_GetGameByCode",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/games/{id}/title": {
       "get": {
         "tags": [
@@ -181,24 +135,24 @@
         }
       }
     },
-    "/games/favorite/{id}": {
+    "/games/favorites": {
       "post": {
         "tags": [
           "Game"
         ],
         "operationId": "Game_FavoriteGame",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FavoriteModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
@@ -218,18 +172,18 @@
           "Game"
         ],
         "operationId": "Game_UnfavoriteGame",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FavoriteModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
@@ -281,79 +235,12 @@
         }
       }
     },
-    "/games/codes/{code}": {
-      "get": {
-        "tags": [
-          "Game"
-        ],
-        "operationId": "Game_GetGameByCode",
-        "parameters": [
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GameViewModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/games/images/{id}": {
-      "get": {
-        "tags": [
-          "Game"
-        ],
-        "operationId": "Game_GetImagesForGame",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/images/{id}": {
+    "/games/{id}/images": {
       "post": {
         "tags": [
-          "Images"
+          "Game"
         ],
-        "operationId": "Images_AddImageForGame",
+        "operationId": "Game_AddImageForGame",
         "parameters": [
           {
             "name": "id",
@@ -430,6 +317,119 @@
           }
         }
       },
+      "get": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_GetImagesForGame",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/{id}/copies": {
+      "post": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_RegisterCopy",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterCopyModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_GetCopies",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CopyViewModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/{id}": {
       "get": {
         "tags": [
           "Images"
@@ -579,56 +579,6 @@
   },
   "components": {
     "schemas": {
-      "RegisterCopyModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "tags": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          },
-          "cost": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "purchased": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "CopyViewModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "tags": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          },
-          "cost": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "purchased": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
       "GameModel": {
         "type": "object",
         "additionalProperties": false,
@@ -702,6 +652,16 @@
           }
         }
       },
+      "FavoriteModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gameId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
       "IHeaderDictionary": {
         "type": "object",
         "x-abstract": true,
@@ -716,6 +676,56 @@
           "ContentLength": {
             "type": "integer",
             "format": "int64",
+            "nullable": true
+          }
+        }
+      },
+      "RegisterCopyModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "cost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "purchased": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CopyViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "tags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "cost": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "purchased": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }

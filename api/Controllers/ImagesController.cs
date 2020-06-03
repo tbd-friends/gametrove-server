@@ -21,17 +21,6 @@ namespace api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost, Route("{id}")]
-        public async Task AddImageForGame(Guid id, [FromForm]IFormFile file)
-        {
-            await _mediator.Send(new AttachImageToGame
-            {
-                Id = id,
-                Content = file.OpenReadStream(),
-                FileName = file.FileName
-            });
-        }
-
         [HttpGet, Route("{id}")]
         public async Task<IActionResult> GetImage(Guid id, ImageSize size = ImageSize.Small)
         {
