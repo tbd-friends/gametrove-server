@@ -9,14 +9,16 @@ namespace GameTrove.Application.Commands.Handlers
 {
     public class UpdateTitleHandler : IRequestHandler<UpdateTitle, TitleViewModel>
     {
+        private readonly IMediator _mediator;
         private readonly GameTrackerContext _context;
 
-        public UpdateTitleHandler(GameTrackerContext context)
+        public UpdateTitleHandler(IMediator mediator, GameTrackerContext context)
         {
+            _mediator = mediator;
             _context = context;
         }
 
-        public Task<TitleViewModel> Handle(UpdateTitle request, CancellationToken cancellationToken)
+        public async Task<TitleViewModel> Handle(UpdateTitle request, CancellationToken cancellationToken)
         {
             var existing = _context.Titles.Single(t => t.Id == request.TitleId);
 
@@ -25,15 +27,25 @@ namespace GameTrove.Application.Commands.Handlers
                 existing.Name = request.Name;
                 existing.Subtitle = request.Subtitle;
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync(cancellationToken);
             }
 
-            return Task.FromResult(new TitleViewModel
+            if (request.Genres != null)
+            {
+                await _mediator.Send(new AssignGenresToTitle
+                    {
+                        TitleId = existing.Id, 
+                        Genres = request.Genres
+                    },
+                    cancellationToken);
+            }
+
+            return new TitleViewModel
             {
                 Id = existing.Id,
                 Name = existing.Name,
                 Subtitle = existing.Subtitle
-            });
+            };
         }
     }
 }

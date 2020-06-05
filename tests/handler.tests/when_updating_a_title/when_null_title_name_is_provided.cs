@@ -8,6 +8,8 @@ using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
 using handler.tests.Infrastructure;
+using MediatR;
+using Moq;
 using Xunit;
 
 namespace handler.tests.when_updating_a_title
@@ -16,6 +18,7 @@ namespace handler.tests.when_updating_a_title
     {
         private UpdateTitleHandler _subject;
         private TitleViewModel _result;
+        private Mock<IMediator> _mediator;
 
         private Guid _titleId = new Guid("8D535577-BA03-4B94-9272-71E1E527FF57");
         private string TitleName = "Name";
@@ -30,7 +33,8 @@ namespace handler.tests.when_updating_a_title
 
         private void Arrange()
         {
-            _subject = new UpdateTitleHandler(Context);
+            _mediator = new Mock<IMediator>();
+            _subject = new UpdateTitleHandler(_mediator.Object, Context);
 
             Context.Titles.Add(new Title()
             {
