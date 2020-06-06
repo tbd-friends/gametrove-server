@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace GameTrove.Application.ViewModels
 {
@@ -8,6 +10,7 @@ namespace GameTrove.Application.ViewModels
         public string Code { get; set; }
         public string Name { get; set; }
         public string Subtitle { get; set; }
+        public IEnumerable<string> Genres { get; set; }
         public DateTime Registered { get; set; }
         public string Platform { get; set; }
         public bool IsFavorite { get; set; }

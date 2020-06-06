@@ -520,7 +520,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TitleModel"
+                "$ref": "#/components/schemas/UpdateTitleModel"
               }
             }
           },
@@ -586,6 +586,13 @@
             "type": "string",
             "nullable": true
           },
+          "genres": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
           "registered": {
             "type": "string",
             "format": "date-time"
@@ -614,6 +621,13 @@
           "subtitle": {
             "type": "string",
             "nullable": true
+          },
+          "genres": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -739,6 +753,30 @@
             "nullable": true
           }
         }
+      },
+      "UpdateTitleModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TitleModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "guid"
+              },
+              "genres": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
       },
       "TitleModel": {
         "type": "object",

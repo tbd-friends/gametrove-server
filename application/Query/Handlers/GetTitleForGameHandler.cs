@@ -5,7 +5,6 @@ using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace GameTrove.Application.Query.Handlers
 {
@@ -27,7 +26,11 @@ namespace GameTrove.Application.Query.Handlers
                           {
                               Id = t.Id,
                               Name = t.Name,
-                              Subtitle = t.Subtitle
+                              Subtitle = t.Subtitle,
+                              Genres = (from tg in _context.TitleGenres
+                                        join g in _context.Genres on tg.GenreId equals g.Id
+                                        where tg.TitleId == t.Id
+                                        select g.Name)
                           });
 
             return await result.SingleOrDefaultAsync(cancellationToken);

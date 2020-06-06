@@ -31,7 +31,11 @@ namespace GameTrove.Application.Query.Handlers
                                   Registered = pg.Registered,
                                   Code = pg.Code,
                                   Platform = p.Name,
-                                  IsFavorite = pg.IsFavorite
+                                  IsFavorite = pg.IsFavorite,
+                                  Genres = (from tg in _context.TitleGenres
+                                            join g in _context.Genres on tg.GenreId equals g.Id
+                                            where tg.TitleId == t.Id
+                                            select g.Name).ToList()
                               }).SingleOrDefaultAsync(cancellationToken: cancellationToken);
 
             return game != null ? new GameViewModel
@@ -42,7 +46,8 @@ namespace GameTrove.Application.Query.Handlers
                 Name = game.Name,
                 Registered = game.Registered,
                 Platform = game.Platform,
-                IsFavorite = game.IsFavorite
+                IsFavorite = game.IsFavorite,
+                Genres = game.Genres
             } : null;
         }
     }

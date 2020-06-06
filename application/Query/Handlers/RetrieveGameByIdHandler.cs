@@ -30,7 +30,11 @@ namespace GameTrove.Application.Query.Handlers
                               Name = t.Name,
                               Registered = pg.Registered,
                               Platform = p.Name,
-                              IsFavorite = pg.IsFavorite
+                              IsFavorite = pg.IsFavorite,
+                              Genres = (from tg in _context.TitleGenres
+                                  join g in _context.Genres on tg.GenreId equals g.Id
+                                  where tg.TitleId == t.Id
+                                  select g.Name)
                           }).SingleOrDefault();
 
             return Task.FromResult(result);

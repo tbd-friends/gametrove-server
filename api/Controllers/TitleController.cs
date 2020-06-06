@@ -21,13 +21,14 @@ namespace api.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<TitleViewModel>> UpdateTitle(Guid id, TitleModel model)
+        public async Task<ActionResult<TitleViewModel>> UpdateTitle(Guid id, UpdateTitleModel model)
         {
             var result = await _mediator.Send(new UpdateTitle
             {
                 TitleId = id,
                 Name = model.Name,
-                Subtitle = model.Subtitle
+                Subtitle = model.Subtitle,
+                Genres = model.Genres
             });
 
             return result != null ? new ActionResult<TitleViewModel>(result) : BadRequest();
