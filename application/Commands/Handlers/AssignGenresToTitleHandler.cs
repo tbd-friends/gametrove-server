@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,9 @@ namespace GameTrove.Application.Commands.Handlers
 
         public async Task<Unit> Handle(AssignGenresToTitle request, CancellationToken cancellationToken)
         {
+            var existingAssociations = _context.TitleGenres.Where(tg => tg.TitleId == request.TitleId).ToList();
+            List<Guid> associated = new List<Guid>();
+
             foreach (var name in request.Genres.Distinct())
             {
                 var genre = await _mediator.Send(new RegisterGenre { Name = name }, cancellationToken);
@@ -37,9 +41,27 @@ namespace GameTrove.Application.Commands.Handlers
 
                     await _context.SaveChangesAsync(cancellationToken);
                 }
+
+                associated.Add(genre);
             }
 
+            await RemoveUnusedAssociations(cancellationToken, existingAssociations, associated);
+
             return Unit.Value;
+        }
+
+        private async Task RemoveUnusedAssociations(CancellationToken cancellationToken, 
+            List<TitleGenre> existingAssociations,
+            List<Guid> associated)
+        {
+            var difference = existingAssociations.Where(ea => associated.All(a => ea.GenreId != a));
+
+            foreach (var toRemove in difference)
+            {
+                _context.Remove(toRemove);
+
+                await _context.SaveChangesAsync(cancellationToken);
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ namespace GameTrove.Storage
     public class GameTrackerContext : DbContext
     {
         public DbSet<Copy> Copies { get; set; }
+        public DbSet<Genre> Genres { get; set; }
         public DbSet<Title> Titles { get; set; }
         public DbSet<TitleGenre> TitleGenres { get; set; }
         public DbSet<Game> Games { get; set; }
