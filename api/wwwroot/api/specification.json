@@ -393,6 +393,29 @@
         }
       }
     },
+    "/genres": {
+      "get": {
+        "tags": [
+          "Genres"
+        ],
+        "operationId": "Genres_GetGenreLabels",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/images/{id}": {
       "get": {
         "tags": [

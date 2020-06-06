@@ -19,7 +19,6 @@ namespace api.Controllers
             _mediator = mediator;
         }
 
-
         [HttpPut("{id}")]
         public async Task<ActionResult<TitleViewModel>> UpdateTitle(Guid id, UpdateTitleModel model)
         {
