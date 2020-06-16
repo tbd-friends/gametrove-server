@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup')]/providers/Microsoft.Sql/servers/gametracker-api/databases/gametracker-api",
+      "type": "mssql.azure",
+      "connectionId": "gametracker",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

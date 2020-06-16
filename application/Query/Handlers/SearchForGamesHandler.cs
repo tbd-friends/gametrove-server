@@ -41,7 +41,11 @@ namespace GameTrove.Application.Query.Handlers
                               Code = pg.Code,
                               Registered = pg.Registered,
                               Platform = p.Name,
-                              IsFavorite = pg.IsFavorite
+                              IsFavorite = pg.IsFavorite,
+                              Genres = (from tg in _context.TitleGenres
+                                        join g in _context.Genres on tg.GenreId equals g.Id
+                                        where tg.TitleId == t.Id
+                                        select g.Name).ToList()
                           };
 
             if (request.MostRecentlyAdded > 0)
@@ -53,16 +57,18 @@ namespace GameTrove.Application.Query.Handlers
                 results = results.OrderBy(r => r.Name);
             }
 
-            return Task.FromResult(results.Select(r => new GameViewModel
-            {
-                Id = r.Id,
-                Code = r.Code,
-                Name = r.Name,
-                Subtitle = r.Subtitle,
-                Registered = r.Registered,
-                Platform = r.Platform,
-                IsFavorite = r.IsFavorite
-            }).AsEnumerable());
+            return Task.FromResult(results.AsEnumerable().Select(r =>
+                new GameViewModel
+                {
+                    Id = r.Id,
+                    Code = r.Code,
+                    Name = r.Name,
+                    Subtitle = r.Subtitle,
+                    Registered = r.Registered,
+                    Platform = r.Platform,
+                    IsFavorite = r.IsFavorite,
+                    Genres = r.Genres
+                }));
         }
     }
 }
