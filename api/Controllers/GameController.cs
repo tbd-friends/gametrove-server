@@ -137,5 +137,15 @@ namespace api.Controllers
                 GameId = id
             });
         }
+
+        [HttpPut("{id}/copies")]
+        public async Task<CopyViewModel> UpdateCopy(Guid id, UpdateCopyModel model)
+        {
+            return await _mediator.Send(new UpdateCopy
+            {
+                Id = model.Id,
+                Tags = model.Tags
+            });
+        }
     }
 }

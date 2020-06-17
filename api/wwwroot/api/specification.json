@@ -391,6 +391,48 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_UpdateCopy",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCopyModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopyViewModel"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/genres": {
@@ -731,6 +773,23 @@
             "nullable": true
           }
         }
+      },
+      "UpdateCopyModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RegisterCopyModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "guid"
+              }
+            }
+          }
+        ]
       },
       "ImageSize": {
         "type": "integer",

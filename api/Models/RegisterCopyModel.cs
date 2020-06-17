@@ -8,4 +8,9 @@ namespace GameTrove.Api.Models
         public decimal? Cost { get; set; }
         public DateTime? Purchased { get; set; }
     }
+
+    public class UpdateCopyModel : RegisterCopyModel
+    {
+        public Guid Id { get; set; }
+    }
 }
