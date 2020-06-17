@@ -50,7 +50,7 @@ namespace GameTrove.Application.Query.Handlers
 
             if (request.MostRecentlyAdded > 0)
             {
-                results = results.OrderBy(r => r.Registered).Take(request.MostRecentlyAdded.Value);
+                results = results.OrderByDescending(r => r.Registered).Take(request.MostRecentlyAdded.Value);
             }
             else
             {
