@@ -1,6 +1,7 @@
 using GameTrove.Application.Commands;
 using GameTrove.Storage;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +23,30 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddDbContextPool<GameTrackerContext>(sql =>
                 sql.UseSqlServer(Configuration.GetConnectionString("gametracker")));
 
             services.AddMediatR(typeof(RegisterGame).Assembly);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = Configuration["auth:domain"];
+                options.Audience = Configuration["auth:audience"];
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
+                options.AddPolicy("User", policy => policy.RequireRole("User"));
+                options.AddPolicy("Read-Only", policy => policy.RequireRole("Read-Only"));
+            });
+
+            services.AddControllers();
 
             services.AddOpenApiDocument(configure =>
             {
@@ -52,6 +72,8 @@ namespace api
                 settings.Path = "/api";
                 settings.DocumentPath = "/api/specification.json";
             });
+
+            app.UseAuthentication();
 
             app.UseRouting();
 
