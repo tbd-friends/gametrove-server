@@ -4,6 +4,7 @@ using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
 using GameTrove.Application.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -19,7 +20,7 @@ namespace api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Administrator,User")]
         public async Task<ActionResult<TitleViewModel>> UpdateTitle(Guid id, UpdateTitleModel model)
         {
             var result = await _mediator.Send(new UpdateTitle

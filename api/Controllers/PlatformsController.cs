@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -18,7 +19,7 @@ namespace api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Administrator,User")]
         public async Task<IEnumerable<PlatformViewModel>> GetPlatforms()
         {
             return await _mediator.Send(new GetPlatforms());
