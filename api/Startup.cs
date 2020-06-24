@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using api.Controllers;
+using GameTrove.Api.Infrastructure;
 using GameTrove.Application.Commands;
 using GameTrove.Storage;
 using MediatR;
@@ -8,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace api
 {
@@ -27,7 +31,9 @@ namespace api
                 sql.UseSqlServer(Configuration.GetConnectionString("gametracker")));
 
             services.AddMediatR(typeof(RegisterGame).Assembly);
-
+            services.AddHttpContextAccessor(); 
+            services.AddTransient<IAuthenticatedMediator, AuthenticatedMediator>();
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,6 +43,10 @@ namespace api
             {
                 options.Authority = Configuration["auth:domain"];
                 options.Audience = Configuration["auth:audience"];
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = ClaimTypes.NameIdentifier
+                };
             });
 
             services.AddAuthorization(options =>
@@ -74,9 +84,7 @@ namespace api
             });
 
             app.UseAuthentication();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
