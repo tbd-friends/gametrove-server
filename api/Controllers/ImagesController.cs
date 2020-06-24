@@ -19,7 +19,7 @@ namespace api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet, Route("{id}"), Authorize(Roles = "Administrator,User")]
+        [HttpGet, Route("{id}")]
         public async Task<IActionResult> GetImage(Guid id, ImageSize size = ImageSize.Small)
         {
             var path = await _mediator.Send(new GetFilePathForImage { Id = id });

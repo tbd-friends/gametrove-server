@@ -12,35 +12,29 @@ using Xunit;
 
 namespace handler.tests.when_registering_a_copy
 {
-    public class when_cost_is_provided : InMemoryContext<GameTrackerContext>
+    public class when_no_user_is_provided : InMemoryContext<GameTrackerContext>
     {
-        private RegisterCopyHandler _subject;
+        private readonly RegisterCopyHandler _subject;
         private Mock<IMediator> _mediator;
         private Guid _gameId = new Guid("EA3B0EA5-D005-4D2F-95EF-9894132EC63E");
         private decimal _cost = 19.99m;
 
-        public when_cost_is_provided()
+        public when_no_user_is_provided()
         {
             _mediator = new Mock<IMediator>();
-
             _subject = new RegisterCopyHandler(Context, _mediator.Object);
 
             _subject.Handle(new RegisterCopy
             {
                 GameId = _gameId,
-                Cost = _cost,
-                Email = "EmailAddress",
-                Identifier = "Identifier"
+                Cost = _cost
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void value_is_record()
+        public void copy_is_not_registered()
         {
-            var copy = Context.Copies.SingleOrDefault(c => c.GameId == _gameId);
-
-            copy.Cost.Should().NotBeNull();
-            copy.Cost.Should().Be(_cost);
+            Context.Copies.Count().Should().Be(0);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Infrastructure;
 using api.Models;
+using GameTrove.Api.Infrastructure;
 using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Query;
@@ -13,16 +14,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace api.Controllers
 {
     [ApiController]
     [Route("games")]
     public class GameController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IAuthenticatedMediator _mediator;
 
-        public GameController(IMediator mediator)
+        public GameController(IAuthenticatedMediator mediator)
         {
             _mediator = mediator;
         }
@@ -119,15 +119,17 @@ namespace api.Controllers
         }
 
         [HttpPost("{id}/copies"), Authorize(Roles = "Administrator,User")]
-        public async Task<Guid> RegisterCopy(Guid id, RegisterCopyModel model)
+        public async Task<ActionResult<Guid>> RegisterCopy(Guid id, RegisterCopyModel model)
         {
-            return await _mediator.Send(new RegisterCopy
+            var result = await _mediator.Send(new RegisterCopy
             {
                 GameId = id,
                 Tags = model.Tags,
                 Cost = model.Cost,
                 Purchased = model.Purchased
             });
+
+            return result != null ? (ActionResult<Guid>)Ok(result.Value) : Unauthorized();
         }
 
         [HttpGet("{id}/copies"), Authorize(Roles = "Administrator,User")]

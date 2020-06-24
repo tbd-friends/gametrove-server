@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameTrove.Api.Infrastructure;
 using GameTrove.Api.Models;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
@@ -13,9 +14,9 @@ namespace api.Controllers
     [Route("search")]
     public class SearchController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IAuthenticatedMediator _mediator;
 
-        public SearchController(IMediator mediator)
+        public SearchController(IAuthenticatedMediator mediator)
         {
             _mediator = mediator;
         }
