@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using GameTrove.Application.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -17,7 +18,7 @@ namespace api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Administrator,User")]
         public async Task<IEnumerable<string>> GetGenreLabels()
         {
             return await _mediator.Send(new GetGenreLabels());

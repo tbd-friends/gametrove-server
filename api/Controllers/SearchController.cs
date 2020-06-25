@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameTrove.Api.Infrastructure;
 using GameTrove.Api.Models;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -12,14 +14,14 @@ namespace api.Controllers
     [Route("search")]
     public class SearchController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IAuthenticatedMediator _mediator;
 
-        public SearchController(IMediator mediator)
+        public SearchController(IAuthenticatedMediator mediator)
         {
             _mediator = mediator;
         }
 
-        [HttpPost("games")]
+        [HttpPost("games"), Authorize(Roles = "Administrator,User")]
         public async Task<IEnumerable<GameViewModel>> SearchGames(SearchModel model)
         {
             return await _mediator.Send(new SearchForGames

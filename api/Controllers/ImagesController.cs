@@ -1,11 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using api.Infrastructure;
-using GameTrove.Application.Commands;
 using GameTrove.Application.Query;
 using MediatR;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers

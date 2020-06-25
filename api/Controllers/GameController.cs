@@ -4,14 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Infrastructure;
 using api.Models;
+using GameTrove.Api.Infrastructure;
 using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace api.Controllers
 {
@@ -19,14 +20,14 @@ namespace api.Controllers
     [Route("games")]
     public class GameController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IAuthenticatedMediator _mediator;
 
-        public GameController(IMediator mediator)
+        public GameController(IAuthenticatedMediator mediator)
         {
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Administrator,User")]
         public async Task<IActionResult> AddNewGame(GameModel model)
         {
             var result = await _mediator.Send(new RegisterGame
@@ -40,7 +41,7 @@ namespace api.Controllers
             return result != null ? (IActionResult)Created($"/games/codes/{result.Code}", result) : Conflict();
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}"), Authorize(Roles = "Administrator,User")]
         public async Task<ActionResult<GameViewModel>> GetGame(Guid id)
         {
             var result = await _mediator.Send(new RetrieveGameById() { Id = id });
@@ -48,7 +49,7 @@ namespace api.Controllers
             return result != null ? new ActionResult<GameViewModel>(result) : NotFound();
         }
 
-        [HttpGet("{code}")]
+        [HttpGet("{code}"), Authorize(Roles = "Administrator,User")]
         public async Task<ActionResult<GameViewModel>> GetGameByCode(string code)
         {
             var game = await _mediator.Send(new RetrieveGameByCode
@@ -64,7 +65,7 @@ namespace api.Controllers
             return NotFound();
         }
 
-        [HttpGet("{id}/title")]
+        [HttpGet("{id}/title"), Authorize(Roles = "Administrator,User")]
         public async Task<ActionResult<TitleViewModel>> GetTitleForGame(Guid id)
         {
             var result = await _mediator.Send(new GetTitleForGame
@@ -75,7 +76,7 @@ namespace api.Controllers
             return result != null ? new ActionResult<TitleViewModel>(result) : BadRequest();
         }
 
-        [HttpPost("favorites")]
+        [HttpPost("favorites"), Authorize(Roles = "Administrator,User")]
         public async Task<IActionResult> FavoriteGame(FavoriteModel model)
         {
             await _mediator.Send(new FavoriteGame
@@ -86,7 +87,7 @@ namespace api.Controllers
             return Ok();
         }
 
-        [HttpDelete("favorites")]
+        [HttpDelete("favorites"), Authorize(Roles = "Administrator,User")]
         public async Task<IActionResult> UnfavoriteGame(FavoriteModel model)
         {
             await _mediator.Send(new UnfavoriteGame
@@ -97,7 +98,7 @@ namespace api.Controllers
             return Ok();
         }
 
-        [HttpPost("{id}/images")]
+        [HttpPost("{id}/images"), Authorize(Roles = "Administrator,User")]
         public async Task AddImageForGame(Guid id, [FromForm] IFormFile file)
         {
             await _mediator.Send(new AttachImageToGame
@@ -108,7 +109,7 @@ namespace api.Controllers
             });
         }
 
-        [HttpGet("{id}/images")]
+        [HttpGet("{id}/images"), Authorize(Roles = "Administrator,User")]
         public async Task<IEnumerable<string>> GetImagesForGame(Guid id)
         {
             var paths = from x in await _mediator.Send(new GetImageIdentifiersForGame { Id = id })
@@ -117,19 +118,21 @@ namespace api.Controllers
             return paths;
         }
 
-        [HttpPost("{id}/copies")]
-        public async Task<Guid> RegisterCopy(Guid id, RegisterCopyModel model)
+        [HttpPost("{id}/copies"), Authorize(Roles = "Administrator,User")]
+        public async Task<ActionResult<Guid>> RegisterCopy(Guid id, RegisterCopyModel model)
         {
-            return await _mediator.Send(new RegisterCopy
+            var result = await _mediator.Send(new RegisterCopy
             {
                 GameId = id,
                 Tags = model.Tags,
                 Cost = model.Cost,
                 Purchased = model.Purchased
             });
+
+            return result != null ? (ActionResult<Guid>)Ok(result.Value) : Unauthorized();
         }
 
-        [HttpGet("{id}/copies")]
+        [HttpGet("{id}/copies"), Authorize(Roles = "Administrator,User")]
         public async Task<IEnumerable<CopyViewModel>> GetCopies(Guid id)
         {
             return await _mediator.Send(new GetCopies
@@ -138,7 +141,7 @@ namespace api.Controllers
             });
         }
 
-        [HttpPut("{id}/copies")]
+        [HttpPut("{id}/copies"), Authorize(Roles = "Administrator,User")]
         public async Task<CopyViewModel> UpdateCopy(Guid id, UpdateCopyModel model)
         {
             return await _mediator.Send(new UpdateCopy

@@ -6,6 +6,8 @@ using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
 using GameTrove.Storage;
 using handler.tests.Infrastructure;
+using MediatR;
+using Moq;
 using Xunit;
 
 namespace handler.tests.when_registering_a_copy
@@ -13,17 +15,22 @@ namespace handler.tests.when_registering_a_copy
     public class when_tags_are_provided : InMemoryContext<GameTrackerContext>
     {
         private RegisterCopyHandler _subject;
+        private Mock<IMediator> _mediator;
         private Guid _gameId = new Guid("D90CCB13-5932-42EB-80F7-7DD61C70367B");
         private string[] _tags = { "Tag1", "Tag2" };
 
         public when_tags_are_provided()
         {
-            _subject = new RegisterCopyHandler(Context);
+            _mediator = new Mock<IMediator>();
+
+            _subject = new RegisterCopyHandler(Context, _mediator.Object);
 
             _subject.Handle(new RegisterCopy
             {
                 GameId = _gameId,
-                Tags = _tags
+                Tags = _tags,
+                Email = "EmailAddress",
+                Identifier = "Identifier"
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
