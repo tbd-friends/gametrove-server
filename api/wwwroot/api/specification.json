@@ -744,6 +744,9 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "isWanted": {
+            "type": "boolean"
           }
         }
       },
@@ -771,6 +774,9 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "isWanted": {
+            "type": "boolean"
           }
         }
       },

@@ -127,7 +127,8 @@ namespace api.Controllers
                 GameId = id,
                 Tags = model.Tags,
                 Cost = model.Cost,
-                Purchased = model.Purchased
+                Purchased = model.Purchased,
+                IsWanted = model.IsWanted
             });
 
             return result != null ? (ActionResult<Guid>)Ok(result.Value) : Unauthorized();
@@ -148,7 +149,8 @@ namespace api.Controllers
             return await _mediator.Send(new UpdateCopy
             {
                 Id = model.Id,
-                Tags = model.Tags
+                Tags = model.Tags,
+                IsWanted = model.IsWanted
             });
         }
     }

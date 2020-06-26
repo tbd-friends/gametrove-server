@@ -22,9 +22,9 @@ namespace GameTrove.Application.Query.Handlers
         public Task<IEnumerable<CopyViewModel>> Handle(GetCopies request, CancellationToken cancellationToken)
         {
             var copies = (from cp in _context.Copies
-                         join u in _context.Users on cp.UserId equals u.Id
-                         where u.Email == request.Email && cp.GameId == request.GameId
-                         select cp).ToList();
+                          join u in _context.Users on cp.UserId equals u.Id
+                          where u.Email == request.Email && cp.GameId == request.GameId
+                          select cp).ToList();
 
             return Task.FromResult((from c in copies
                                     select new CopyViewModel
@@ -32,7 +32,8 @@ namespace GameTrove.Application.Query.Handlers
                                         Id = c.Id,
                                         Cost = c.Cost,
                                         Tags = JsonSerializer.Deserialize<string[]>(c.Tags),
-                                        Purchased = c.Purchased
+                                        Purchased = c.Purchased,
+                                        IsWanted = c.IsWanted
                                     }).AsEnumerable());
         }
     }
