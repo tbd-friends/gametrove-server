@@ -104,7 +104,7 @@ namespace handler.tests.when_registering_game
         {
             _mediator.Verify(mediator =>
                 mediator.Send(
-                    It.Is<RegisterCopy>(cp => cp.GameId == _result.Id), CancellationToken.None), Times.Once);
+                    It.Is<AddCopy>(cp => cp.GameId == _result.Id), CancellationToken.None), Times.Once);
         }
     }
 }

@@ -10,15 +10,16 @@ using MediatR;
 using Moq;
 using Xunit;
 
-namespace handler.tests.when_registering_a_copy
+namespace handler.tests.when_adding_a_copy
 {
-    public class when_only_game_id_is_provided : InMemoryContext<GameTrackerContext>
+    public class when_marked_as_is_wanted : InMemoryContext<GameTrackerContext>
     {
-        private RegisterCopyHandler _subject;
+        private AddCopyHandler _addCopy;
         private Mock<IMediator> _mediator;
-        private Guid _gameId = new Guid("43D7C3EF-A9A9-4D95-819E-1E995E407B4C");
 
-        public when_only_game_id_is_provided()
+        private Guid GameId = new Guid("0617C481-165F-4629-99EC-DB6122056F19");
+
+        public when_marked_as_is_wanted()
         {
             Arrange();
 
@@ -28,24 +29,24 @@ namespace handler.tests.when_registering_a_copy
         private void Arrange()
         {
             _mediator = new Mock<IMediator>();
-
-            _subject = new RegisterCopyHandler(Context, _mediator.Object);
+            _addCopy = new AddCopyHandler(Context, _mediator.Object);
         }
 
         private void Act()
         {
-            _subject.Handle(new RegisterCopy
+            _addCopy.Handle(new AddCopy
             {
-                GameId = _gameId,
-                Email = "EmailAddress",
+                GameId = GameId,
+                IsWanted = true,
+                Email = "Email",
                 Identifier = "Identifier"
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void copy_is_registered()
+        public void copy_is_marked_as_wanted()
         {
-            Context.Copies.Count().Should().Be(1);
+            Context.Copies.Single().IsWanted.Should().BeTrue();
         }
     }
 }

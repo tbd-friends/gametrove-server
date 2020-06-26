@@ -10,7 +10,6 @@ using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
 using handler.tests.Infrastructure;
-using MediatR;
 using Moq;
 using Xunit;
 
@@ -103,7 +102,7 @@ namespace handler.tests.when_registering_game
         {
             _mediator.Verify(mediator =>
                 mediator.Send(
-                    It.Is<RegisterCopy>(cp => cp.GameId == _result.Id), CancellationToken.None), Times.Once);
+                    It.Is<AddCopy>(cp => cp.GameId == _result.Id), CancellationToken.None), Times.Once);
         }
     }
 }

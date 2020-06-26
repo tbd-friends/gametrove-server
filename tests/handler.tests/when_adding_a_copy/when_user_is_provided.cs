@@ -11,11 +11,11 @@ using MediatR;
 using Moq;
 using Xunit;
 
-namespace handler.tests.when_registering_a_copy
+namespace handler.tests.when_adding_a_copy
 {
     public class when_user_is_provided : InMemoryContext<GameTrackerContext>
     {
-        private RegisterCopyHandler _subject;
+        private AddCopyHandler _subject;
         private Mock<IMediator> _mediator;
         private Guid _gameId = new Guid("EA3B0EA5-D005-4D2F-95EF-9894132EC63E");
         private string _email = "EmailAddress";
@@ -36,12 +36,12 @@ namespace handler.tests.when_registering_a_copy
             _mediator.Setup(md => md.Send(It.IsAny<RegisterUser>(), CancellationToken.None))
                 .Returns(Task.FromResult(_userId));
 
-            _subject = new RegisterCopyHandler(Context, _mediator.Object);
+            _subject = new AddCopyHandler(Context, _mediator.Object);
         }
 
         private void Act()
         {
-            _subject.Handle(new RegisterCopy
+            _subject.Handle(new AddCopy
             {
                 GameId = _gameId,
                 Email = _email,

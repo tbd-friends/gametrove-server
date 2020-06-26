@@ -28,7 +28,7 @@ namespace GameTrove.Application.Commands.Handlers
 
             var game = await RegisterGame(request, title);
 
-            await _mediator.Send(new RegisterCopy
+            await _mediator.Send(new AddCopy
             {
                 GameId = game.Id
             }, cancellationToken);
@@ -46,7 +46,9 @@ namespace GameTrove.Application.Commands.Handlers
 
         private async Task<Game> RegisterGame(RegisterGame request, TitleViewModel title)
         {
-            var game = _context.Games.SingleOrDefault(g => GameExists(request, title, g));
+            var game = _context.Games.SingleOrDefault(g =>
+                (!string.IsNullOrEmpty(request.Code) && g.Code == request.Code) ||
+                g.PlatformId == request.Platform && g.TitleId == title.Id);
 
             if (game != null) return game;
 
@@ -63,12 +65,6 @@ namespace GameTrove.Application.Commands.Handlers
             await _context.SaveChangesAsync();
 
             return game;
-        }
-
-        private static bool GameExists(RegisterGame request, TitleViewModel title, Game g)
-        {
-            return (!string.IsNullOrEmpty(request.Code) && g.Code == request.Code) ||
-                   (g.PlatformId == request.Platform && g.TitleId == title.Id);
         }
     }
 }

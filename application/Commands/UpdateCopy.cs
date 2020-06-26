@@ -10,5 +10,6 @@ namespace GameTrove.Application.Commands
     {
         public Guid Id { get; set; }
         public IEnumerable<string> Tags { get; set; }
+        public bool IsWanted { get; set; }
     }
 }

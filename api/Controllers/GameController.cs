@@ -122,7 +122,7 @@ namespace api.Controllers
         [HttpPost("{id}/copies"), Authorize(Roles = "Administrator,User")]
         public async Task<ActionResult<Guid>> RegisterCopy(Guid id, RegisterCopyModel model)
         {
-            var result = await _mediator.Send(new RegisterCopy
+            var result = await _mediator.Send(new AddCopy
             {
                 GameId = id,
                 Tags = model.Tags,

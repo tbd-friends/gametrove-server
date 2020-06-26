@@ -22,6 +22,7 @@ namespace GameTrove.Application.Commands.Handlers
             var copy = _context.Copies.Single(cp => cp.Id == request.Id);
 
             copy.Tags = JsonSerializer.Serialize(request.Tags);
+            copy.IsWanted = request.IsWanted;
 
             await _context.SaveChangesAsync(cancellationToken);
 
