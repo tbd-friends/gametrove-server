@@ -7,6 +7,7 @@ using api.Models;
 using GameTrove.Api.Infrastructure;
 using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using MediatR;

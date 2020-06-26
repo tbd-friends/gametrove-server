@@ -20,10 +20,20 @@ namespace handler.tests.when_registering_a_copy
 
         public when_only_game_id_is_provided()
         {
+            Arrange();
+
+            Act();
+        }
+
+        private void Arrange()
+        {
             _mediator = new Mock<IMediator>();
 
             _subject = new RegisterCopyHandler(Context, _mediator.Object);
+        }
 
+        private void Act()
+        {
             _subject.Handle(new RegisterCopy
             {
                 GameId = _gameId,

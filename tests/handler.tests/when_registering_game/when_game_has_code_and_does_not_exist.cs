@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
@@ -18,7 +19,7 @@ namespace handler.tests.when_registering_game
     public class when_game_has_code_and_does_not_exist : InMemoryContext<GameTrackerContext>
     {
         private RegisterGameHandler _subject;
-        private Mock<IMediator> _mediator;
+        private Mock<IAuthenticatedMediator> _mediator;
         private GameViewModel _result;
         private Game _game;
 
@@ -38,7 +39,7 @@ namespace handler.tests.when_registering_game
 
         private void Arrange()
         {
-            _mediator = new Mock<IMediator>();
+            _mediator = new Mock<IAuthenticatedMediator>();
 
             Context.Platforms.Add(new Platform()
             {
@@ -96,6 +97,14 @@ namespace handler.tests.when_registering_game
             _result.Name.Should().Be(TitleName);
             _result.Subtitle.Should().Be(TitleSubtitle);
             _result.Platform.Should().Be(PlatformName);
+        }
+
+        [Fact]
+        public void copy_is_registered_for_user()
+        {
+            _mediator.Verify(mediator =>
+                mediator.Send(
+                    It.Is<RegisterCopy>(cp => cp.GameId == _result.Id), CancellationToken.None), Times.Once);
         }
     }
 }

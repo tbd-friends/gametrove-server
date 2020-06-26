@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
@@ -12,9 +13,9 @@ namespace GameTrove.Application.Commands.Handlers
     public class RegisterGameHandler : IRequestHandler<RegisterGame, GameViewModel>
     {
         private readonly GameTrackerContext _context;
-        private readonly IMediator _mediator;
+        private readonly IAuthenticatedMediator _mediator;
 
-        public RegisterGameHandler(GameTrackerContext context, IMediator mediator)
+        public RegisterGameHandler(GameTrackerContext context, IAuthenticatedMediator mediator)
         {
             _context = context;
             _mediator = mediator;
@@ -32,6 +33,11 @@ namespace GameTrove.Application.Commands.Handlers
 
             if (exists != null)
             {
+                await _mediator.Send(new RegisterCopy
+                {
+                    GameId = exists.Id
+                }, cancellationToken);
+
                 return new GameViewModel
                 {
                     Id = exists.Id,
@@ -54,6 +60,11 @@ namespace GameTrove.Application.Commands.Handlers
             _context.Games.Add(game);
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            await _mediator.Send(new RegisterCopy
+            {
+                GameId = game.Id
+            }, cancellationToken);
 
             return new GameViewModel
             {
