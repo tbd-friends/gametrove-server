@@ -9,18 +9,18 @@ using MediatR;
 
 namespace GameTrove.Application.Commands.Handlers
 {
-    public class RegisterCopyHandler : IRequestHandler<RegisterCopy, Guid?>
+    public class AddCopyHandler : IRequestHandler<AddCopy, Guid?>
     {
         private readonly GameTrackerContext _context;
         private readonly IMediator _mediator;
 
-        public RegisterCopyHandler(GameTrackerContext context, IMediator mediator)
+        public AddCopyHandler(GameTrackerContext context, IMediator mediator)
         {
             _context = context;
             _mediator = mediator;
         }
 
-        public async Task<Guid?> Handle(RegisterCopy request, CancellationToken cancellationToken)
+        public async Task<Guid?> Handle(AddCopy request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Email) ||
                 string.IsNullOrEmpty(request.Identifier))
@@ -40,7 +40,8 @@ namespace GameTrove.Application.Commands.Handlers
                 Cost = request.Cost,
                 UserId = userId,
                 Tags = JsonSerializer.Serialize(request.Tags),
-                Purchased = request.Purchased
+                Purchased = request.Purchased,
+                IsWanted = request.IsWanted
             };
 
             _context.Copies.Add(copy);

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Infrastructure;
 using api.Models;
-using GameTrove.Api.Infrastructure;
 using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -119,14 +118,15 @@ namespace api.Controllers
         }
 
         [HttpPost("{id}/copies"), Authorize(Roles = "Administrator,User")]
-        public async Task<ActionResult<Guid>> RegisterCopy(Guid id, RegisterCopyModel model)
+        public async Task<ActionResult<Guid>> RegisterCopy(Guid id, AddCopyModel model)
         {
-            var result = await _mediator.Send(new RegisterCopy
+            var result = await _mediator.Send(new AddCopy
             {
                 GameId = id,
                 Tags = model.Tags,
                 Cost = model.Cost,
-                Purchased = model.Purchased
+                Purchased = model.Purchased,
+                IsWanted = model.IsWanted
             });
 
             return result != null ? (ActionResult<Guid>)Ok(result.Value) : Unauthorized();
@@ -147,7 +147,8 @@ namespace api.Controllers
             return await _mediator.Send(new UpdateCopy
             {
                 Id = model.Id,
-                Tags = model.Tags
+                Tags = model.Tags,
+                IsWanted = model.IsWanted
             });
         }
     }

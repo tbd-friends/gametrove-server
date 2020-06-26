@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace GameTrove.Api.Infrastructure
+namespace GameTrove.Application.Infrastructure
 {
     public interface IAuthenticatedMediator : IMediator
     {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
@@ -18,7 +19,7 @@ namespace handler.tests.when_registering_game
     public class when_game_has_code_but_no_code_provided : InMemoryContext<GameTrackerContext>
     {
         private RegisterGameHandler _subject;
-        private Mock<IMediator> _mediator;
+        private Mock<IAuthenticatedMediator> _mediator;
         private GameViewModel _result;
 
         private readonly string _code = "Code";
@@ -36,7 +37,7 @@ namespace handler.tests.when_registering_game
 
         private void Arrange()
         {
-            _mediator = new Mock<IMediator>();
+            _mediator = new Mock<IAuthenticatedMediator>();
 
             _mediator.Setup(md =>
                 md.Send(
@@ -95,6 +96,14 @@ namespace handler.tests.when_registering_game
             _result.Subtitle.Should().Be(_titleSubtitle);
             _result.Platform.Should().Be("Platform");
             _result.Code.Should().Be(_code);
+        }
+
+        [Fact]
+        public void copy_is_registered_for_user()
+        {
+            _mediator.Verify(mediator =>
+                mediator.Send(
+                    It.Is<AddCopy>(cp => cp.GameId == _result.Id), CancellationToken.None), Times.Once);
         }
     }
 }

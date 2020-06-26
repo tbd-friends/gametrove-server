@@ -338,7 +338,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterCopyModel"
+                "$ref": "#/components/schemas/AddCopyModel"
               }
             }
           },
@@ -724,7 +724,7 @@
           }
         }
       },
-      "RegisterCopyModel": {
+      "AddCopyModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -744,6 +744,9 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "isWanted": {
+            "type": "boolean"
           }
         }
       },
@@ -771,13 +774,16 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "isWanted": {
+            "type": "boolean"
           }
         }
       },
       "UpdateCopyModel": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/RegisterCopyModel"
+            "$ref": "#/components/schemas/AddCopyModel"
           },
           {
             "type": "object",

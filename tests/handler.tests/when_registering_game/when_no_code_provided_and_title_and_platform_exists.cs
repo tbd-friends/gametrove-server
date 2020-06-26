@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
 using handler.tests.Infrastructure;
-using MediatR;
 using Moq;
 using Xunit;
 
@@ -20,7 +20,7 @@ namespace handler.tests.when_registering_game
         private RegisterGameHandler _subject;
         private GameViewModel _result;
 
-        private Mock<IMediator> _mediator;
+        private Mock<IAuthenticatedMediator> _mediator;
         private readonly Guid _platformId = new Guid("900583FE-1B2C-4D15-BA56-236F37459FE1");
         private readonly Guid _titleId = new Guid("6B2BA877-ADDA-49D0-828F-C27856A921E8");
         private readonly string _titleName = "TitleName";
@@ -35,7 +35,7 @@ namespace handler.tests.when_registering_game
 
         private void Arrange()
         {
-            _mediator = new Mock<IMediator>();
+            _mediator = new Mock<IAuthenticatedMediator>();
 
             _subject = new RegisterGameHandler(Context, _mediator.Object);
 
@@ -95,6 +95,14 @@ namespace handler.tests.when_registering_game
             _result.Subtitle.Should().Be(_titleSubtitle);
             _result.Platform.Should().Be("Platform");
             _result.Code.Should().Be(null);
+        }
+
+        [Fact]
+        public void copy_is_registered_for_user()
+        {
+            _mediator.Verify(mediator =>
+                mediator.Send(
+                    It.Is<AddCopy>(cp => cp.GameId == _result.Id), CancellationToken.None), Times.Once);
         }
     }
 }

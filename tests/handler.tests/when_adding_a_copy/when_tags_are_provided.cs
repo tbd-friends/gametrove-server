@@ -10,37 +10,38 @@ using MediatR;
 using Moq;
 using Xunit;
 
-namespace handler.tests.when_registering_a_copy
+namespace handler.tests.when_adding_a_copy
 {
-    public class when_cost_is_provided : InMemoryContext<GameTrackerContext>
+    public class when_tags_are_provided : InMemoryContext<GameTrackerContext>
     {
-        private RegisterCopyHandler _subject;
+        private AddCopyHandler _subject;
         private Mock<IMediator> _mediator;
-        private Guid _gameId = new Guid("EA3B0EA5-D005-4D2F-95EF-9894132EC63E");
-        private decimal _cost = 19.99m;
+        private Guid _gameId = new Guid("D90CCB13-5932-42EB-80F7-7DD61C70367B");
+        private string[] _tags = { "Tag1", "Tag2" };
 
-        public when_cost_is_provided()
+        public when_tags_are_provided()
         {
             _mediator = new Mock<IMediator>();
 
-            _subject = new RegisterCopyHandler(Context, _mediator.Object);
+            _subject = new AddCopyHandler(Context, _mediator.Object);
 
-            _subject.Handle(new RegisterCopy
+            _subject.Handle(new AddCopy
             {
                 GameId = _gameId,
-                Cost = _cost,
+                Tags = _tags,
                 Email = "EmailAddress",
                 Identifier = "Identifier"
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void value_is_record()
+        public void tags_are_added()
         {
             var copy = Context.Copies.SingleOrDefault(c => c.GameId == _gameId);
 
-            copy.Cost.Should().NotBeNull();
-            copy.Cost.Should().Be(_cost);
+            copy.Should().NotBeNull();
+            copy.Tags.Should().Contain("Tag1");
+            copy.Tags.Should().Contain("Tag2");
         }
     }
 }

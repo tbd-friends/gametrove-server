@@ -10,5 +10,6 @@ namespace GameTrove.Storage.Models
         public string Tags { get; set; }
         public decimal? Cost { get; set; }
         public DateTime? Purchased { get; set; }
+        public bool IsWanted { get; set; }
     }
 }

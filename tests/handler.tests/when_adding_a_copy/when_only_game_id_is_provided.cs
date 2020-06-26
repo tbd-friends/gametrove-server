@@ -10,21 +10,31 @@ using MediatR;
 using Moq;
 using Xunit;
 
-namespace handler.tests.when_registering_a_copy
+namespace handler.tests.when_adding_a_copy
 {
     public class when_only_game_id_is_provided : InMemoryContext<GameTrackerContext>
     {
-        private RegisterCopyHandler _subject;
+        private AddCopyHandler _subject;
         private Mock<IMediator> _mediator;
         private Guid _gameId = new Guid("43D7C3EF-A9A9-4D95-819E-1E995E407B4C");
 
         public when_only_game_id_is_provided()
         {
+            Arrange();
+
+            Act();
+        }
+
+        private void Arrange()
+        {
             _mediator = new Mock<IMediator>();
 
-            _subject = new RegisterCopyHandler(Context, _mediator.Object);
+            _subject = new AddCopyHandler(Context, _mediator.Object);
+        }
 
-            _subject.Handle(new RegisterCopy
+        private void Act()
+        {
+            _subject.Handle(new AddCopy
             {
                 GameId = _gameId,
                 Email = "EmailAddress",
