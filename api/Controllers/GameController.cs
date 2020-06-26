@@ -120,7 +120,7 @@ namespace api.Controllers
         }
 
         [HttpPost("{id}/copies"), Authorize(Roles = "Administrator,User")]
-        public async Task<ActionResult<Guid>> RegisterCopy(Guid id, RegisterCopyModel model)
+        public async Task<ActionResult<Guid>> RegisterCopy(Guid id, AddCopyModel model)
         {
             var result = await _mediator.Send(new AddCopy
             {
