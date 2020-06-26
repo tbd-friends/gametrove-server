@@ -148,6 +148,7 @@ namespace api.Controllers
             {
                 Id = model.Id,
                 Tags = model.Tags,
+                Purchased = model.Purchased,
                 IsWanted = model.IsWanted
             });
         }

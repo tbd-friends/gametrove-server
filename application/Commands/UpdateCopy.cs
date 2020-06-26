@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using GameTrove.Application.ViewModels;
 using MediatR;
@@ -11,5 +10,6 @@ namespace GameTrove.Application.Commands
         public Guid Id { get; set; }
         public IEnumerable<string> Tags { get; set; }
         public bool IsWanted { get; set; }
+        public DateTime? Purchased { get; set; }
     }
 }
