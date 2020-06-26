@@ -338,7 +338,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterCopyModel"
+                "$ref": "#/components/schemas/AddCopyModel"
               }
             }
           },
@@ -724,7 +724,7 @@
           }
         }
       },
-      "RegisterCopyModel": {
+      "AddCopyModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -783,7 +783,7 @@
       "UpdateCopyModel": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/RegisterCopyModel"
+            "$ref": "#/components/schemas/AddCopyModel"
           },
           {
             "type": "object",
