@@ -26,40 +26,7 @@ namespace GameTrove.Application.Commands.Handlers
             var title = await _mediator.Send(
                 new RegisterTitle { Name = request.Name, Subtitle = request.Subtitle }, cancellationToken);
 
-            var exists = _context.Games.SingleOrDefault(g =>
-                (!string.IsNullOrEmpty(request.Code) && g.Code == request.Code) ||
-                (g.PlatformId == request.Platform && g.TitleId == title.Id)
-            );
-
-            if (exists != null)
-            {
-                await _mediator.Send(new RegisterCopy
-                {
-                    GameId = exists.Id
-                }, cancellationToken);
-
-                return new GameViewModel
-                {
-                    Id = exists.Id,
-                    Name = title.Name,
-                    Subtitle = title.Subtitle,
-                    Platform = _context.Platforms.Single(p => p.Id == request.Platform).Name,
-                    Registered = exists.Registered,
-                    Code = exists.Code
-                };
-            }
-
-            var game = new Game()
-            {
-                TitleId = title.Id,
-                PlatformId = request.Platform,
-                Registered = DateTime.UtcNow,
-                Code = request.Code
-            };
-
-            _context.Games.Add(game);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            var game = await RegisterGame(request, title);
 
             await _mediator.Send(new RegisterCopy
             {
@@ -75,6 +42,33 @@ namespace GameTrove.Application.Commands.Handlers
                 Registered = game.Registered,
                 Code = game.Code
             };
+        }
+
+        private async Task<Game> RegisterGame(RegisterGame request, TitleViewModel title)
+        {
+            var game = _context.Games.SingleOrDefault(g => GameExists(request, title, g));
+
+            if (game != null) return game;
+
+            game = new Game()
+            {
+                TitleId = title.Id,
+                PlatformId = request.Platform,
+                Registered = DateTime.UtcNow,
+                Code = request.Code
+            };
+
+            _context.Games.Add(game);
+
+            await _context.SaveChangesAsync();
+
+            return game;
+        }
+
+        private static bool GameExists(RegisterGame request, TitleViewModel title, Game g)
+        {
+            return (!string.IsNullOrEmpty(request.Code) && g.Code == request.Code) ||
+                   (g.PlatformId == request.Platform && g.TitleId == title.Id);
         }
     }
 }
