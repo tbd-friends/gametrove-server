@@ -24,6 +24,7 @@ namespace GameTrove.Application.Commands.Handlers
             copy.Tags = JsonSerializer.Serialize(request.Tags);
             copy.IsWanted = request.IsWanted;
             copy.Purchased = request.Purchased;
+            copy.Cost = request.Cost;
 
             await _context.SaveChangesAsync(cancellationToken);
 

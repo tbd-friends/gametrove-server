@@ -20,9 +20,10 @@ namespace handler.tests.when_updating_a_title
         private TitleViewModel _result;
         private Mock<IMediator> _mediator;
 
-        private Guid _titleId = new Guid("006A571F-5BEB-4AB5-867E-9195C31AB4BA");
-        private string TitleName = "TitleName";
-        private string TitleSubtitle = "TitleSubtitle";
+        private readonly Guid _titleId = new Guid("006A571F-5BEB-4AB5-867E-9195C31AB4BA");
+        private readonly string TitleName = "TitleName";
+        private readonly string ExistingSubtitle = "Subtitle";
+        private readonly string NewSubtitle = "TitleSubtitle";
 
         public when_new_subtitle_is_provided()
         {
@@ -41,7 +42,7 @@ namespace handler.tests.when_updating_a_title
             {
                 Id = _titleId,
                 Name = TitleName,
-                Subtitle = "NewSubtitle"
+                Subtitle = ExistingSubtitle
             });
 
             Context.SaveChanges();
@@ -53,7 +54,7 @@ namespace handler.tests.when_updating_a_title
             {
                 TitleId = _titleId,
                 Name = TitleName,
-                Subtitle = "NewSubtitle"
+                Subtitle = NewSubtitle
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
@@ -63,7 +64,7 @@ namespace handler.tests.when_updating_a_title
             var title = Context.Titles.Single(t => t.Id == _titleId);
 
             title.Name.Should().Be(TitleName);
-            title.Subtitle.Should().Be("NewSubtitle");
+            title.Subtitle.Should().Be(NewSubtitle);
         }
 
         [Fact]
@@ -71,7 +72,7 @@ namespace handler.tests.when_updating_a_title
         {
             _result.Id.Should().Be(_titleId);
             _result.Name.Should().Be(TitleName);
-            _result.Subtitle.Should().Be("NewSubtitle");
+            _result.Subtitle.Should().Be(NewSubtitle);
         }
     }
 }

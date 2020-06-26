@@ -11,5 +11,6 @@ namespace GameTrove.Application.Commands
         public IEnumerable<string> Tags { get; set; }
         public bool IsWanted { get; set; }
         public DateTime? Purchased { get; set; }
+        public decimal? Cost { get; set; }
     }
 }
