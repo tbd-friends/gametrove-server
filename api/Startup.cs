@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using api.Controllers;
 using GameTrove.Api.Infrastructure;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Infrastructure;

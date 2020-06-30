@@ -31,6 +31,12 @@ namespace GameTrove.Application.Query.Handlers
             var results = from t in query
                           join pg in _context.Games on t.Id equals pg.TitleId
                           join p in _context.Platforms on pg.PlatformId equals p.Id
+                          where ( 
+                                  from c in _context.Copies
+                                  where 
+                                      c.GameId == pg.Id && 
+                                      c.UserId == ( _context.Users.Single(u => u.Email == request.Email).Id)
+                                  select c).Any()
                           select new
                           {
                               Id = pg.Id,
