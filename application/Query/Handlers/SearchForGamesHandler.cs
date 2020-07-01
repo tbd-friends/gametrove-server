@@ -34,8 +34,8 @@ namespace GameTrove.Application.Query.Handlers
                           where ( 
                                   from c in _context.Copies
                                   where 
-                                      c.GameId == pg.Id && 
-                                      c.UserId == ( _context.Users.Single(u => u.Email == request.Email).Id)
+                                      c.GameId == pg.Id 
+                                      //TODO: && c.UserId == ( _context.Users.Single(u => u.Email == request.Email).Id)
                                   select c).Any()
                           select new
                           {

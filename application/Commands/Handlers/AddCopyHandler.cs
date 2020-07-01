@@ -38,7 +38,7 @@ namespace GameTrove.Application.Commands.Handlers
             {
                 GameId = request.GameId,
                 Cost = request.Cost,
-                UserId = userId,
+                // TODO: UserId = userId,
                 Tags = JsonSerializer.Serialize(request.Tags),
                 Purchased = request.Purchased,
                 IsWanted = request.IsWanted
