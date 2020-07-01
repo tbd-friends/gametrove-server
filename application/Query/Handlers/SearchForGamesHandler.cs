@@ -31,11 +31,11 @@ namespace GameTrove.Application.Query.Handlers
             var results = from t in query
                           join pg in _context.Games on t.Id equals pg.TitleId
                           join p in _context.Platforms on pg.PlatformId equals p.Id
-                          where ( 
+                          where (
                                   from c in _context.Copies
-                                  where 
-                                      c.GameId == pg.Id 
-                                      //TODO: && c.UserId == ( _context.Users.Single(u => u.Email == request.Email).Id)
+                                  join u in _context.Users on c.TenantId equals u.TenantId
+                                  where
+                                      c.GameId == pg.Id && u.Email == request.Email
                                   select c).Any()
                           select new
                           {

@@ -28,7 +28,7 @@ namespace GameTrove.Application.Commands.Handlers
                 return null;
             }
 
-            var userId = await _mediator.Send(new RegisterUser
+            var user = await _mediator.Send(new RegisterUser
             {
                 Email = request.Email,
                 Identifier = request.Identifier
@@ -38,7 +38,7 @@ namespace GameTrove.Application.Commands.Handlers
             {
                 GameId = request.GameId,
                 Cost = request.Cost,
-                // TODO: UserId = userId,
+                TenantId = user.TenantId,
                 Tags = JsonSerializer.Serialize(request.Tags),
                 Purchased = request.Purchased,
                 IsWanted = request.IsWanted
