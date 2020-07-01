@@ -5,13 +5,11 @@ using MediatR;
 
 namespace GameTrove.Application.Commands
 {
-    public class RegisterGame : IRequestWithAuthentication<GameViewModel>
+    public class RegisterGame : AuthenticatedRequest<GameViewModel>
     {
         public string Name { get; set; }
         public string Subtitle { get; set; }
         public string Code { get; set; }
         public Guid Platform { get; set; }
-        public string Email { get; set; }
-        public string Identifier { get; set; }
     }
 }

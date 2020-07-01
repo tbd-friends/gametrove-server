@@ -20,11 +20,13 @@ namespace GameTrove.Application.Commands.Handlers
         public async Task<TitleViewModel> Handle(RegisterTitle request, CancellationToken cancellationToken)
         {
             var title = _context.Titles
-                .SingleOrDefault(x => x.Name == request.Name && x.Subtitle == request.Subtitle);
+                .SingleOrDefault(x => x.Name == request.Name &&
+                                      x.Subtitle == request.Subtitle &&
+                                      x.TenantId == request.TenantId);
 
             if (title == null)
             {
-                title = new Title { Name = request.Name, Subtitle = request.Subtitle };
+                title = new Title { Name = request.Name, Subtitle = request.Subtitle, TenantId = request.TenantId };
 
                 _context.Titles.Add(title);
 

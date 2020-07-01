@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using GameTrove.Api.Infrastructure;
 using GameTrove.Api.Models;
 using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace api.Controllers
+namespace GameTrove.Api.Controllers
 {
     [ApiController]
     [Route("search")]

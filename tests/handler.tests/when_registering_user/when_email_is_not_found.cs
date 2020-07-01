@@ -4,6 +4,7 @@ using System.Threading;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
+using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using handler.tests.Infrastructure;
 using Xunit;
@@ -15,7 +16,7 @@ namespace handler.tests.when_registering_user
         private RegisterUserHandler _subject;
         private string _email = "EmailAddress";
         private string _identifier = "Identifier";
-        private Guid _result;
+        private RegisterUserResult _result;
 
         public when_email_is_not_found()
         {
@@ -39,9 +40,10 @@ namespace handler.tests.when_registering_user
         }
 
         [Fact]
-        public void user_id_is_returned()
+        public void user_is_returned()
         {
-            _result.Should().NotBe(Guid.Empty);
+            _result.UserId.Should().NotBeEmpty();
+            _result.TenantId.Should().NotBeEmpty();
         }
 
         [Fact]

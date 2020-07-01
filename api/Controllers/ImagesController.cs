@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using api.Infrastructure;
 using GameTrove.Application.Query;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace api.Controllers
+namespace GameTrove.Api.Controllers
 {
     [ApiController]
     [Route("images")]

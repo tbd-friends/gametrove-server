@@ -4,6 +4,7 @@ using System.Threading;
 using FluentAssertions;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
+using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
 using handler.tests.Infrastructure;
@@ -16,8 +17,9 @@ namespace handler.tests.when_registering_user
         private RegisterUserHandler _subject;
         private readonly string _email = "EmailAddress";
         private readonly string _identifier = "Identifier";
-        private Guid _result;
+        private RegisterUserResult _result;
         private readonly Guid _userId = new Guid("6E17E727-37A8-45FD-8F3F-4E5B7C6CEA9A");
+        private readonly Guid _tenantId = new Guid("EC5B073D-F597-4205-98FE-2634875C565A");
 
         public when_email_is_found()
         {
@@ -32,7 +34,8 @@ namespace handler.tests.when_registering_user
             {
                 Id = _userId,
                 Email = _email,
-                Identifier = _identifier
+                Identifier = _identifier,
+                TenantId = _tenantId
             });
 
             Context.SaveChanges();
@@ -52,7 +55,8 @@ namespace handler.tests.when_registering_user
         [Fact]
         public void user_id_is_returned()
         {
-            _result.Should().Be(_userId);
+            _result.UserId.Should().Be(_userId);
+            _result.TenantId.Should().NotBeEmpty();
         }
 
         [Fact]
