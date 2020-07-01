@@ -47,8 +47,11 @@ namespace GameTrove.Application.Commands.Handlers
         private async Task<Game> RegisterGame(RegisterGame request, TitleViewModel title)
         {
             var game = _context.Games.SingleOrDefault(g =>
-                (!string.IsNullOrEmpty(request.Code) && g.Code == request.Code) ||
-                g.PlatformId == request.Platform && g.TitleId == title.Id);
+                g.TenantId == request.TenantId &&
+                (
+                    (!string.IsNullOrEmpty(request.Code) && g.Code == request.Code) ||
+                    g.PlatformId == request.Platform && g.TitleId == title.Id
+                ));
 
             if (game != null) return game;
 
@@ -57,7 +60,8 @@ namespace GameTrove.Application.Commands.Handlers
                 TitleId = title.Id,
                 PlatformId = request.Platform,
                 Registered = DateTime.UtcNow,
-                Code = request.Code
+                Code = request.Code,
+                TenantId = request.TenantId
             };
 
             _context.Games.Add(game);

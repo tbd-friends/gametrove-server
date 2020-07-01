@@ -33,13 +33,7 @@ namespace handler.tests.when_adding_a_copy
         private void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(md => md.Send(It.IsAny<RegisterUser>(), CancellationToken.None))
-                .Returns(Task.FromResult(new RegisterUserResult
-                {
-                    UserId = _userId,
-                    TenantId = _tenantId
-                }));
-            _addCopy = new AddCopyHandler(Context, _mediator.Object);
+            _addCopy = new AddCopyHandler(Context);
         }
 
         private void Act()
@@ -48,8 +42,8 @@ namespace handler.tests.when_adding_a_copy
             {
                 GameId = GameId,
                 IsWanted = true,
-                Email = "Email",
-                Identifier = "Identifier"
+                UserId = _userId,
+                TenantId = _tenantId
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 

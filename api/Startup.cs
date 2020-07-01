@@ -2,6 +2,7 @@ using System.Security.Claims;
 using GameTrove.Api.Infrastructure;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Infrastructure;
+using GameTrove.Application.Services;
 using GameTrove.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,6 +34,7 @@ namespace api
             services.AddMediatR(typeof(RegisterGame).Assembly);
             services.AddHttpContextAccessor(); 
             services.AddTransient<IAuthenticatedMediator, AuthenticatedMediator>();
+            services.AddTransient<AuthenticationService>();
             
             services.AddAuthentication(options =>
             {

@@ -1,11 +1,12 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace GameTrove.Application.Infrastructure
 {
     public interface IBaseRequestWithAuthentication
     {
-        string Email { get; set; }
-        string Identifier { get; set; }
+        Guid UserId { get; set; }
+        Guid TenantId { get; set; }
     }
 
     public interface IRequestWithAuthentication : IBaseRequestWithAuthentication, IRequest

@@ -17,7 +17,6 @@ namespace handler.tests.when_adding_a_copy
     public class when_cost_is_provided : InMemoryContext<GameTrackerContext>
     {
         private AddCopyHandler _subject;
-        private Mock<IMediator> _mediator;
         private Guid _gameId = new Guid("EA3B0EA5-D005-4D2F-95EF-9894132EC63E");
         private decimal _cost = 19.99m;
         private Guid _userId = new Guid("381BEF14-35AF-47FC-8FE2-35132121EA3B");
@@ -25,21 +24,14 @@ namespace handler.tests.when_adding_a_copy
 
         public when_cost_is_provided()
         {
-            _mediator = new Mock<IMediator>();
-            _mediator.Setup(md => md.Send(It.IsAny<RegisterUser>(), CancellationToken.None))
-                .Returns(Task.FromResult(new RegisterUserResult
-                {
-                    UserId = _userId,
-                    TenantId = _tenantId
-                }));
-            _subject = new AddCopyHandler(Context, _mediator.Object);
+            _subject = new AddCopyHandler(Context);
 
             _subject.Handle(new AddCopy
             {
                 GameId = _gameId,
                 Cost = _cost,
-                Email = "EmailAddress",
-                Identifier = "Identifier"
+                UserId = _userId,
+                TenantId = _tenantId
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 

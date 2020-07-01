@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using GameTrove.Application.Infrastructure;
+using GameTrove.Application.Services;
+using GameTrove.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -11,11 +13,15 @@ namespace GameTrove.Api.Infrastructure
     public class AuthenticatedMediator : IAuthenticatedMediator
     {
         private readonly IMediator _mediator;
+        private readonly AuthenticationService _authentication;
         private readonly ClaimsPrincipal _principal;
 
-        public AuthenticatedMediator(IMediator mediator, IHttpContextAccessor contextAccessor)
+        public AuthenticatedMediator(IMediator mediator,
+            AuthenticationService authentication,
+            IHttpContextAccessor contextAccessor)
         {
             _mediator = mediator;
+            _authentication = authentication;
 
             _principal = contextAccessor.HttpContext.User;
         }
@@ -24,9 +30,10 @@ namespace GameTrove.Api.Infrastructure
         {
             if (request is IRequestWithAuthentication<TResponse> authenticatedRequest)
             {
-                authenticatedRequest.Email = _principal.Claims.Single(c => c.Type == ClaimTypes.Email).Value;
-                authenticatedRequest.Identifier =
-                    _principal.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var user = _authentication.Get(_principal.Claims.Single(c => c.Type == ClaimTypes.Email).Value);
+
+                authenticatedRequest.UserId = user.UserId;
+                authenticatedRequest.TenantId = user.TenantId;
 
                 return await _mediator.Send(authenticatedRequest, cancellationToken);
             }
@@ -38,9 +45,10 @@ namespace GameTrove.Api.Infrastructure
         {
             if (request is IRequestWithAuthentication authenticatedRequest)
             {
-                authenticatedRequest.Email = _principal.Claims.Single(c => c.Type == ClaimTypes.Email).Value;
-                authenticatedRequest.Identifier =
-                    _principal.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var user = _authentication.Get(_principal.Claims.Single(c => c.Type == ClaimTypes.Email).Value);
+
+                authenticatedRequest.UserId = user.UserId;
+                authenticatedRequest.TenantId = user.TenantId;
 
                 return await _mediator.Send(authenticatedRequest, cancellationToken);
             }

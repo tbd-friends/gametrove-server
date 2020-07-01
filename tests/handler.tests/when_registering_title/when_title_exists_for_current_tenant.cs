@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using FluentAssertions;
 using GameTrove.Application.Commands;
@@ -13,16 +14,17 @@ using Xunit;
 
 namespace handler.tests.when_registering_title
 {
-    public class when_title_does_not_exist : InMemoryContext<GameTrackerContext>
+    public class when_title_exists_for_current_tenant : InMemoryContext<GameTrackerContext>
     {
         private RegisterTitleHandler _subject;
         private TitleViewModel _result;
 
-        private const string TitleName = "Game Title";
-        private const string TitleSubtitle = "Subtitle for Game";
-        private readonly Guid _tenantId = new Guid("275DC069-1513-4FE3-B768-02507D7957F5");
+        private const string TitleName = "TitleName";
+        private const string TitleSubtitle = "SubtitleOfTitle";
+        private Guid _userId = new Guid("51F57AC3-0922-4501-9E1E-75444BCA7C20");
+        private readonly Guid _tenantId = new Guid("2F35AE3E-AE6C-4E3F-8BD2-60538ACF1943");
 
-        public when_title_does_not_exist()
+        public when_title_exists_for_current_tenant()
         {
             Arrange();
 
@@ -31,6 +33,9 @@ namespace handler.tests.when_registering_title
 
         private void Arrange()
         {
+            Context.Titles.Add(new Title { Name = TitleName, Subtitle = TitleSubtitle, TenantId = _tenantId });
+            Context.SaveChanges();
+
             _subject = new RegisterTitleHandler(Context);
         }
 
@@ -39,8 +44,7 @@ namespace handler.tests.when_registering_title
             _result = _subject.Handle(new RegisterTitle
             {
                 Name = TitleName,
-                Subtitle = TitleSubtitle,
-                TenantId = _tenantId
+                Subtitle = TitleSubtitle
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
@@ -53,14 +57,9 @@ namespace handler.tests.when_registering_title
         }
 
         [Fact]
-        public void title_is_created()
+        public void title_is_not_added()
         {
-            Context.Titles
-                .SingleOrDefault(t => t.Name == TitleName &&
-                                      t.Subtitle == TitleSubtitle &&
-                                      t.TenantId == _tenantId)
-                .Should()
-                .NotBeNull();
+            Context.Titles.Count(t => t.Name == TitleName && t.Subtitle == TitleSubtitle && t.TenantId == _tenantId).Should().Be(1);
         }
     }
 }

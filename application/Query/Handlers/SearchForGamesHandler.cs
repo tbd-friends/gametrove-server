@@ -33,9 +33,7 @@ namespace GameTrove.Application.Query.Handlers
                           join p in _context.Platforms on pg.PlatformId equals p.Id
                           where (
                                   from c in _context.Copies
-                                  join u in _context.Users on c.TenantId equals u.TenantId
-                                  where
-                                      c.GameId == pg.Id && u.Email == request.Email
+                                  where c.GameId == pg.Id && c.TenantId == request.TenantId
                                   select c).Any()
                           select new
                           {

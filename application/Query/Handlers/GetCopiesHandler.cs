@@ -23,8 +23,7 @@ namespace GameTrove.Application.Query.Handlers
         public Task<IEnumerable<CopyViewModel>> Handle(GetCopies request, CancellationToken cancellationToken)
         {
             var copies = (from cp in _context.Copies
-                          join u in _context.Users on cp.TenantId equals u.TenantId
-                          where u.Email == request.Email && cp.GameId == request.GameId
+                          where cp.GameId == request.GameId && cp.TenantId == request.TenantId
                           select cp).ToList();
 
             return Task.FromResult((from c in copies
