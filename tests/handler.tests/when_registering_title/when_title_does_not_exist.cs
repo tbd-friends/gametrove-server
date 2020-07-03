@@ -6,9 +6,7 @@ using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
 using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
-using GameTrove.Storage.Models;
 using handler.tests.Infrastructure;
-using Moq;
 using Xunit;
 
 namespace handler.tests.when_registering_title

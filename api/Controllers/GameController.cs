@@ -11,6 +11,7 @@ using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameTrove.Api.Controllers
@@ -151,6 +152,15 @@ namespace GameTrove.Api.Controllers
                 Cost = model.Cost,
                 Purchased = model.Purchased,
                 IsWanted = model.IsWanted
+            });
+        }
+
+        [HttpDelete("{id}/copies"), Authorize(Roles = "Administrator,User")]
+        public async Task DeleteCopy(Guid id, UpdateCopyModel model)
+        {
+            await _mediator.Send(new DeleteCopy
+            {
+                CopyId = model.Id
             });
         }
     }
