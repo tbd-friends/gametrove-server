@@ -661,6 +661,26 @@
           }
         }
       }
+    },
+    "/users/invite": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetInvite",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

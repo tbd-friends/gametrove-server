@@ -32,10 +32,12 @@ namespace api
                 sql.UseSqlServer(Configuration.GetConnectionString("gametracker")));
 
             services.AddMediatR(typeof(RegisterGame).Assembly);
-            services.AddHttpContextAccessor(); 
+            services.AddHttpContextAccessor();
             services.AddTransient<IAuthenticatedMediator, AuthenticatedMediator>();
             services.AddTransient<AuthenticationService>();
-            
+            services.AddSingleton<ITokenService>(
+                new DefaultTokenService(int.Parse(Configuration["settings:tokenLength"])));
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
