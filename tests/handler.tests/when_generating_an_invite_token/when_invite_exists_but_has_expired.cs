@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using GameTrove.Application.Commands;
@@ -59,6 +60,12 @@ namespace handler.tests.when_generating_an_invite_token.when_user_exists
         public void new_token_is_returned()
         {
             _result.Should().Be(_expectedToken);
+        }
+
+        [Fact]
+        public void expired_token_is_removed()
+        {
+            Context.TenantInvites.Count(ti => ti.TenantId == _tenantId).Should().Be(1);
         }
     }
 }

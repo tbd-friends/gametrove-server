@@ -23,13 +23,19 @@ namespace GameTrove.Application.Commands.Handlers
 
         public async Task<string> Handle(GenerateInviteToken request, CancellationToken cancellationToken)
         {
-            var pendingInvite = await _context.TenantInvites.SingleOrDefaultAsync(ti =>
-                ti.TenantId == request.TenantId &&
-                ti.Expiration > DateTime.UtcNow, cancellationToken);
+            var pendingInvite = await _context.TenantInvites.SingleOrDefaultAsync(ti => ti.TenantId == request.TenantId,
+                cancellationToken: cancellationToken);
 
             if (pendingInvite != null)
             {
-                return pendingInvite.Token;
+                if (pendingInvite.Expiration > DateTime.UtcNow)
+                {
+                    return pendingInvite.Token;
+                }
+
+                _context.TenantInvites.Remove(pendingInvite);
+
+                await _context.SaveChangesAsync(cancellationToken);
             }
 
             var result = _tokenService.TokenFromGuid(request.TenantId);
@@ -41,7 +47,7 @@ namespace GameTrove.Application.Commands.Handlers
                 Expiration = DateTime.UtcNow.AddHours(4)
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return result;
         }

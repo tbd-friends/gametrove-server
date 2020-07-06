@@ -34,8 +34,7 @@ namespace handler.tests.when_registering_user
         {
             _result = _subject.Handle(new RegisterUser
             {
-                Email = _email,
-                Identifier = _identifier
+                Email = _email
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 
@@ -53,7 +52,6 @@ namespace handler.tests.when_registering_user
 
             user.Should().NotBeNull();
             user.Email.Should().Be(_email);
-            user.Identifier.Should().Be(_identifier);
         }
     }
 }
