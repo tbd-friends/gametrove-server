@@ -661,6 +661,57 @@
           }
         }
       }
+    },
+    "/users/invite": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetInvite",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_AcceptInvite",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -931,6 +982,20 @@
             "nullable": true
           },
           "subtitle": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AcceptModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "token": {
             "type": "string",
             "nullable": true
           }

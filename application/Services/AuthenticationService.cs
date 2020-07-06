@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using GameTrove.Application.Infrastructure;
+using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using GameTrove.Storage.Models;
 
@@ -49,11 +51,5 @@ namespace GameTrove.Application.Services
 
             return false;
         }
-    }
-
-    public class UserViewModel
-    {
-        public Guid UserId { get; set; }
-        public Guid TenantId { get; set; }
     }
 }

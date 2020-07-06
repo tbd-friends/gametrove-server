@@ -34,7 +34,6 @@ namespace handler.tests.when_registering_user
             {
                 Id = _userId,
                 Email = _email,
-                Identifier = _identifier,
                 TenantId = _tenantId
             });
 
@@ -47,8 +46,7 @@ namespace handler.tests.when_registering_user
         {
             _result = _subject.Handle(new RegisterUser
             {
-                Email = _email,
-                Identifier = _identifier
+                Email = _email
             }, CancellationToken.None).GetAwaiter().GetResult();
         }
 

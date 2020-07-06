@@ -2,10 +2,11 @@
 
 namespace GameTrove.Storage.Models
 {
-    public class User
+    public class TenantInvite
     {
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }
-        public string Email { get; set; }
+        public string Token { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

@@ -28,11 +28,12 @@ namespace GameTrove.Application.Commands.Handlers
                 return new RegisterUserResult { TenantId = existing.TenantId, UserId = existing.Id };
             }
 
+            var tenantId = GetTenantIdFromInvite(request.Token);
+
             var user = new User
             {
                 Email = request.Email,
-                Identifier = request.Identifier,
-                TenantId = Guid.NewGuid()
+                TenantId = tenantId ?? Guid.NewGuid()
             };
 
             _context.Users.Add(user);
@@ -40,6 +41,28 @@ namespace GameTrove.Application.Commands.Handlers
             await _context.SaveChangesAsync(cancellationToken);
 
             return new RegisterUserResult { TenantId = user.TenantId, UserId = user.Id };
+        }
+
+        private Guid? GetTenantIdFromInvite(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return null;
+            }
+
+            var invitation = _context.TenantInvites.SingleOrDefault(ti => ti.Token == token);
+
+            if (invitation != null)
+            {
+                if (invitation.Expiration < DateTime.UtcNow)
+                {
+                    throw new ArgumentException("Requested Invite is not valid");
+                }
+
+                return invitation.TenantId;
+            }
+
+            return null;
         }
     }
 }
