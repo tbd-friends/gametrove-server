@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +12,9 @@ namespace GameTrove.Api.Controllers
     [Route("platforms")]
     public class PlatformsController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IAuthenticatedMediator _mediator;
 
-        public PlatformsController(IMediator mediator)
+        public PlatformsController(IAuthenticatedMediator mediator)
         {
             _mediator = mediator;
         }
@@ -23,6 +23,12 @@ namespace GameTrove.Api.Controllers
         public async Task<IEnumerable<PlatformViewModel>> GetPlatforms()
         {
             return await _mediator.Send(new GetPlatforms());
+        }
+
+        [HttpGet("summary"), Authorize(Roles = "Administrator,User")]
+        public async Task<IEnumerable<PlatformSummaryViewModel>> GetSummary()
+        {
+            return await _mediator.Send(new GetPlatformSummary());
         }
     }
 }

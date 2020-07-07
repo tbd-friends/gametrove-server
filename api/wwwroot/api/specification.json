@@ -562,6 +562,29 @@
         }
       }
     },
+    "/platforms/summary": {
+      "get": {
+        "tags": [
+          "Platforms"
+        ],
+        "operationId": "Platforms_GetSummary",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlatformSummaryViewModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/search/games": {
       "post": {
         "tags": [
@@ -931,6 +954,24 @@
           "name": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "PlatformSummaryViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "numberOfGames": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
