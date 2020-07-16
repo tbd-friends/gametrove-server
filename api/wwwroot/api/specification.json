@@ -798,6 +798,16 @@
           },
           "isFavorite": {
             "type": "boolean"
+          },
+          "completeInBoxPrice": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "loosePrice": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
           }
         }
       },
