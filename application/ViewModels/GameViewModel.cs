@@ -14,5 +14,7 @@ namespace GameTrove.Application.ViewModels
         public DateTime Registered { get; set; }
         public string Platform { get; set; }
         public bool IsFavorite { get; set; }
+        public decimal? CompleteInBoxPrice { get; set; }
+        public decimal? LoosePrice { get; set; }
     }
 }

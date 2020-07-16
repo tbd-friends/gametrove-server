@@ -7,6 +7,7 @@ namespace GameTrove.Storage
     {
         public DbSet<Copy> Copies { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<GamePricing> GamePricing { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<GameImage> PlatformGameImages { get; set; }

@@ -31,6 +31,9 @@ namespace GameTrove.Application.Query.Handlers
             var results = from t in query
                           join pg in _context.Games on t.Id equals pg.TitleId
                           join p in _context.Platforms on pg.PlatformId equals p.Id
+                          join gp in _context.GamePricing on pg.Id equals gp.Id
+                              into gpx
+                          from pricing in gpx.DefaultIfEmpty()
                           where (
                                   from c in _context.Copies
                                   where c.GameId == pg.Id && c.TenantId == request.TenantId
@@ -44,6 +47,8 @@ namespace GameTrove.Application.Query.Handlers
                               Registered = pg.Registered,
                               Platform = p.Name,
                               IsFavorite = pg.IsFavorite,
+                              CompleteInBoxPrice = pricing.CompleteInBoxPrice,
+                              LoosePrice = pricing.LoosePrice,
                               Genres = (from tg in _context.TitleGenres
                                         join g in _context.Genres on tg.GenreId equals g.Id
                                         where tg.TitleId == t.Id
@@ -69,7 +74,9 @@ namespace GameTrove.Application.Query.Handlers
                     Registered = r.Registered,
                     Platform = r.Platform,
                     IsFavorite = r.IsFavorite,
-                    Genres = r.Genres
+                    Genres = r.Genres,
+                    CompleteInBoxPrice = r.CompleteInBoxPrice,
+                    LoosePrice = r.LoosePrice
                 }));
         }
     }
