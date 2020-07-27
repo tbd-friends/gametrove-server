@@ -7,6 +7,11 @@ namespace api.Infrastructure
     {
         public static byte[] ResizeImage(this string path, int size)
         {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
             using var input = File.OpenRead(path);
             using var inputStream = new SKManagedStream(input);
             using var original = SKBitmap.Decode(inputStream);

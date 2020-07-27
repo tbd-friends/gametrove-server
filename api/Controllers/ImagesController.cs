@@ -23,7 +23,14 @@ namespace GameTrove.Api.Controllers
         {
             var path = await _mediator.Send(new GetFilePathForImage { Id = id });
 
-            return File(path.ResizeImage((int)size), "image/jpeg");
+            var file = path.ResizeImage((int)size);
+
+            if (file != null)
+            {
+                return File(file, "image/jpeg");
+            }
+
+            return new EmptyResult();
         }
     }
 }
