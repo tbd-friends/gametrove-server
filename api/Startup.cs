@@ -1,4 +1,10 @@
+using System;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
+using api.Settings;
+using Azure.Core.Pipeline;
+using Azure.Storage.Blobs;
 using GameTrove.Api.Infrastructure;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Infrastructure;
@@ -28,15 +34,30 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ServicePointManager.Expect100Continue = false;
+
             services.AddDbContextPool<GameTrackerContext>(sql =>
                 sql.UseSqlServer(Configuration.GetConnectionString("gametracker")));
 
             services.AddMediatR(typeof(RegisterGame).Assembly);
             services.AddHttpContextAccessor();
+
             services.AddTransient<IAuthenticatedMediator, AuthenticatedMediator>();
             services.AddTransient<AuthenticationService>();
             services.AddSingleton<ITokenService>(
                 new DefaultTokenService(int.Parse(Configuration["settings:tokenLength"])));
+
+            services.AddTransient(provider =>
+                new BlobServiceClient(Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING"),
+                    new BlobClientOptions
+                    {
+                        Transport = new HttpClientTransport(new HttpClient { Timeout = TimeSpan.FromSeconds(120) })
+                    }));
+            services.AddTransient(provider => Configuration.GetSection("images").Get<ImageSettings>());
+            services.AddHttpClient<AzureDownloadClient>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration["images:storageurl"]);
+            });
 
             services.AddAuthentication(options =>
             {

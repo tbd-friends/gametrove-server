@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GameTrove.Storage;
 using MediatR;
 
-namespace GameTrove.Application.Query.Handlers
+namespace GameTrove.Application.Query.Handlers.Images
 {
     public class GetImageIdentifiersForGameHandler : IRequestHandler<GetImageIdentifiersForGame, IEnumerable<Guid>>
     {

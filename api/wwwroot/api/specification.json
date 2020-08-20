@@ -941,16 +941,18 @@
         "type": "integer",
         "description": "",
         "x-enumNames": [
+          "Full",
           "Thumb",
           "Small",
           "Medium",
           "Large"
         ],
         "enum": [
+          0,
           50,
           150,
-          300,
-          600
+          504,
+          1008
         ]
       },
       "PlatformViewModel": {

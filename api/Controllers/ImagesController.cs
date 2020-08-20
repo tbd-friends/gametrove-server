@@ -1,6 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
-using api.Infrastructure;
+using Azure.Core.Pipeline;
+using Azure.Storage.Blobs;
+using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +25,11 @@ namespace GameTrove.Api.Controllers
         [HttpGet, Route("{id}")]
         public async Task<IActionResult> GetImage(Guid id, ImageSize size = ImageSize.Small)
         {
-            var path = await _mediator.Send(new GetFilePathForImage { Id = id });
+            var image = await _mediator.Send(new GetSizedImageById { Id = id, Size = size });
 
-            var file = path.ResizeImage((int)size);
-
-            if (file != null)
+            if (image.Length > 0)
             {
-                return File(file, "image/jpeg");
+                return File(image, "image/jpeg");
             }
 
             return new EmptyResult();
