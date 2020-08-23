@@ -8,13 +8,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MobileApps", "MobileApps", "{ACA977BD-00D4-4D44-88F9-A44C1319FEE6}"
 	ProjectSection(SolutionItems) = preProject
 		docs\mobile.md = docs\mobile.md
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "handler.tests", "tests\handler.tests\handler.tests.csproj", "{C40D27D9-D3BF-4AA9-B25D-349F55DF558B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "handler.tests", "tests\handler.tests\handler.tests.csproj", "{C40D27D9-D3BF-4AA9-B25D-349F55DF558B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "application", "application\application.csproj", "{1550E31A-3F39-47DC-A3A1-B21609800ABB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "application", "application\application.csproj", "{1550E31A-3F39-47DC-A3A1-B21609800ABB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "storage", "storage\storage.csproj", "{3338204C-7554-48BE-955F-D4916DE2402E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "storage", "storage\storage.csproj", "{3338204C-7554-48BE-955F-D4916DE2402E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
