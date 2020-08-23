@@ -114,12 +114,15 @@ namespace GameTrove.Api.Controllers
         }
 
         [HttpGet("{id}/images"), Authorize(Roles = "Administrator,User")]
-        public async Task<IEnumerable<string>> GetImagesForGame(Guid id)
+        public async Task<IEnumerable<ImageViewModel>> GetImagesForGame(Guid id)
         {
-            var paths = from x in await _mediator.Send(new GetImageIdentifiersForGame { Id = id })
-                        select $"{HttpContext.Request.GetHost()}/images/{x}";
+            var result = from x in await _mediator.Send(new GetImageIdentifiersForGame { Id = id })
+                        select new ImageViewModel
+                        {
+                            Url = $"images/{x}"
+                        };
 
-            return paths;
+            return result;
         }
 
         [HttpPost("{id}/copies"), Authorize(Roles = "Administrator,User")]

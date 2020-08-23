@@ -26,34 +26,20 @@ namespace GameTrove.Application.Commands.Handlers.Images
                 }, cancellationToken);
             }
 
-            await using (MemoryStream stream = new MemoryStream(request.ImageContent.ResizeImage((int)ImageSize.Small)))
-            {
-                await _mediator.Send(new SendToAzureStorage
-                {
-                    Content = stream,
-                    FileName = ImageFileName.GetGameImageFile(request.ImageId, request.GameId, ImageSize.Small)
-                }, cancellationToken);
-            }
-
-            await using (MemoryStream stream = new MemoryStream(request.ImageContent.ResizeImage((int)ImageSize.Medium)))
-            {
-                await _mediator.Send(new SendToAzureStorage
-                {
-                    Content = stream,
-                    FileName = ImageFileName.GetGameImageFile(request.ImageId, request.GameId, ImageSize.Medium)
-                }, cancellationToken);
-            }
+            await UploadImageBytesSized(request, ImageSize.Small, cancellationToken);
+            await UploadImageBytesSized(request, ImageSize.Medium, cancellationToken);
 
             return Unit.Value;
         }
 
-        private byte[] GetContentAsBytes(Stream content)
+        private async Task UploadImageBytesSized(ResizeImagesAndStore request, ImageSize size, CancellationToken cancellationToken)
         {
-            using MemoryStream memoryStream = new MemoryStream();
-
-            content.CopyTo(memoryStream);
-
-            return memoryStream.ToArray();
+            await using MemoryStream stream = new MemoryStream(request.ImageContent.ResizeImage((int)size));
+            await _mediator.Send(new SendToAzureStorage
+            {
+                Content = stream,
+                FileName = ImageFileName.GetGameImageFile(request.ImageId, request.GameId, ImageSize.Medium)
+            }, cancellationToken);
         }
     }
 }

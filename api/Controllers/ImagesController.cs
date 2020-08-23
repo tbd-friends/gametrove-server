@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Azure.Core.Pipeline;
 using Azure.Storage.Blobs;
+using GameTrove.Application.Commands;
 using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
 using MediatR;
@@ -33,6 +34,14 @@ namespace GameTrove.Api.Controllers
             }
 
             return new EmptyResult();
+        }
+
+        [HttpDelete, Route("{id}")]
+        public async Task<IActionResult> DeleteImage(Guid id)
+        {
+            await _mediator.Send(new DeleteImage { Id = id });
+
+            return Ok();
         }
     }
 }

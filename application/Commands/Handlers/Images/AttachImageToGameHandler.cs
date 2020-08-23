@@ -31,12 +31,7 @@ namespace GameTrove.Application.Commands.Handlers.Images
         }
 
         public async Task<Unit> Handle(AttachImageToGame request, CancellationToken cancellationToken)
-        {
-            if (!Directory.Exists(_imagePath))
-            {
-                Directory.CreateDirectory(_imagePath);
-            }
-
+        {  
             if (request.Content.Length > 0)
             {
                 var gameImage = new GameImage
@@ -48,6 +43,11 @@ namespace GameTrove.Application.Commands.Handlers.Images
 
                 if (_settings.Local)
                 {
+                    if (!Directory.Exists(_imagePath))
+                    {
+                        Directory.CreateDirectory(_imagePath);
+                    }
+
                     File.WriteAllBytes(Path.Combine(_imagePath, $"{request.GameId}_{gameImage.Id}.jpg"),
                         request.Content);
                 }
