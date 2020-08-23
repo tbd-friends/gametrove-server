@@ -38,7 +38,7 @@ namespace GameTrove.Application.Commands.Handlers.Images
             await _mediator.Send(new SendToAzureStorage
             {
                 Content = stream,
-                FileName = ImageFileName.GetGameImageFile(request.ImageId, request.GameId, ImageSize.Medium)
+                FileName = ImageFileName.GetGameImageFile(request.ImageId, request.GameId, size)
             }, cancellationToken);
         }
     }
