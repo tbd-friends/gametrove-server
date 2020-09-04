@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Azure.Core.Pipeline;
 using Azure.Storage.Blobs;
+using GameTrove.Api.Models;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
@@ -40,6 +41,14 @@ namespace GameTrove.Api.Controllers
         public async Task<IActionResult> DeleteImage(Guid id)
         {
             await _mediator.Send(new DeleteImage { Id = id });
+
+            return Ok();
+        }
+
+        [HttpPost("coverart")]
+        public async Task<IActionResult> ToggleImageAsCoverArt(CoverArtModel model)
+        {
+            await _mediator.Send(new ToggleImageAsCoverArt { ImageId = model.ImageId });
 
             return Ok();
         }

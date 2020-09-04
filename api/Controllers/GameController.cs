@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using api.Infrastructure;
 using api.Models;
 using GameTrove.Api.Models;
+using GameTrove.Api.ViewModels;
 using GameTrove.Application.Commands;
 using GameTrove.Application.Commands.Handlers;
 using GameTrove.Application.Infrastructure;
@@ -116,11 +117,13 @@ namespace GameTrove.Api.Controllers
         [HttpGet("{id}/images"), Authorize(Roles = "Administrator,User")]
         public async Task<IEnumerable<ImageViewModel>> GetImagesForGame(Guid id)
         {
-            var result = from x in await _mediator.Send(new GetImageIdentifiersForGame { Id = id })
-                        select new ImageViewModel
-                        {
-                            Url = $"images/{x}"
-                        };
+            var result = from x in await _mediator.Send(new GetImagesAttachedToGame { GameId = id })
+                         select new ImageViewModel
+                         {
+                             Id = x.Id,
+                             IsCoverArt = x.IsCoverArt,
+                             Url = $"images/{x.Id}"
+                         };
 
             return result;
         }

@@ -6,4 +6,9 @@ namespace GameTrove.Api.Models
     {
         public Guid GameId { get; set; }   
     }
+
+    public class CoverArtModel
+    {
+        public Guid ImageId { get; set; }
+    }
 }

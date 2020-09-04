@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api", "api\api.csproj", "{604B6A60-D396-4575-99BF-62A01CC8A969}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MobileApps", "MobileApps", "{ACA977BD-00D4-4D44-88F9-A44C1319FEE6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{ACA977BD-00D4-4D44-88F9-A44C1319FEE6}"
 	ProjectSection(SolutionItems) = preProject
 		docs\mobile.md = docs\mobile.md
 		README.md = README.md

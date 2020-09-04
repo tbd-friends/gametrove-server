@@ -570,6 +570,39 @@
         }
       }
     },
+    "/images/coverart": {
+      "post": {
+        "tags": [
+          "Images"
+        ],
+        "operationId": "Images_ToggleImageAsCoverArt",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoverArtModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/platforms": {
       "get": {
         "tags": [
@@ -899,9 +932,16 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
           "url": {
             "type": "string",
             "nullable": true
+          },
+          "isCoverArt": {
+            "type": "boolean"
           }
         }
       },
@@ -995,6 +1035,16 @@
           504,
           1008
         ]
+      },
+      "CoverArtModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "imageId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
       },
       "PlatformViewModel": {
         "type": "object",
