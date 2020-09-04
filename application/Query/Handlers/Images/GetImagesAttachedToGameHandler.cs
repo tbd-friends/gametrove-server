@@ -6,7 +6,7 @@ using GameTrove.Application.ViewModels;
 using GameTrove.Storage;
 using MediatR;
 
-namespace GameTrove.Application.Query.Handlers
+namespace GameTrove.Application.Query.Handlers.Images
 {
     public class GetImagesAttachedToGameHandler : IRequestHandler<GetImagesAttachedToGame, IEnumerable<GameImageViewModel>>
     {
