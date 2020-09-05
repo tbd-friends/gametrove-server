@@ -30,7 +30,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '**/*.sln'
+    arguments: '**/*.sln --Output gametrove-server'
 
 - task: PublishBuildArtifacts@1
   inputs:
