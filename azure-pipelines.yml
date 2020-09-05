@@ -35,5 +35,5 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'gametrove-server.zip'
+    ArtifactName: 'gametrove-server'
     publishLocation: 'Container'
