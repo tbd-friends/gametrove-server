@@ -30,10 +30,10 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '**/*.sln --Output gametrove-server'
+    arguments: '**/*.sln --Output $(Build.ArtifactStagingDirectory)/gametrove-server.zip'
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'gametrove-server'
+    ArtifactName: 'gametrove-server.zip'
     publishLocation: 'Container'
