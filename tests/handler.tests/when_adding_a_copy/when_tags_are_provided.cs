@@ -17,9 +17,9 @@ namespace handler.tests.when_adding_a_copy
     public class when_tags_are_provided : InMemoryContext<GameTrackerContext>
     {
         private AddCopyHandler _subject;
-        private Guid _gameId = new Guid("D90CCB13-5932-42EB-80F7-7DD61C70367B");
-        private Guid _userId = new Guid("381BEF14-35AF-47FC-8FE2-35132121EA3B");
-        private Guid _tenantId = new Guid("7CC736D5-C339-4D95-8192-5F4C29604EEA");
+        private readonly Guid _gameId = new Guid("D90CCB13-5932-42EB-80F7-7DD61C70367B");
+        private readonly Guid _userId = new Guid("381BEF14-35AF-47FC-8FE2-35132121EA3B");
+        private readonly Guid _tenantId = new Guid("7CC736D5-C339-4D95-8192-5F4C29604EEA");
         private readonly string[] _tags = { "Tag1", "Tag2" };
 
         public when_tags_are_provided()

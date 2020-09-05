@@ -16,11 +16,11 @@ namespace handler.tests.when_adding_a_copy
 {
     public class when_cost_is_provided : InMemoryContext<GameTrackerContext>
     {
-        private AddCopyHandler _subject;
-        private Guid _gameId = new Guid("EA3B0EA5-D005-4D2F-95EF-9894132EC63E");
+        private readonly AddCopyHandler _subject;
+        private readonly Guid _gameId = new Guid("EA3B0EA5-D005-4D2F-95EF-9894132EC63E");
         private decimal _cost = 19.99m;
-        private Guid _userId = new Guid("381BEF14-35AF-47FC-8FE2-35132121EA3B");
-        private Guid _tenantId = new Guid("7CC736D5-C339-4D95-8192-5F4C29604EEA");
+        private readonly Guid _userId = new Guid("381BEF14-35AF-47FC-8FE2-35132121EA3B");
+        private readonly Guid _tenantId = new Guid("7CC736D5-C339-4D95-8192-5F4C29604EEA");
 
         public when_cost_is_provided()
         {
