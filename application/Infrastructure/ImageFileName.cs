@@ -20,7 +20,7 @@ namespace GameTrove.Application.Infrastructure
                     name = $"{name}_md";
                     break;
                 case ImageSize.Large:
-                    name = $"{name}_lg";
+                    name = $"{name}";
                     break;
             }
 
