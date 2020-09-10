@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using api.Infrastructure;
 using api.Models;
 using GameTrove.Api.Models;
 using GameTrove.Api.ViewModels;
 using GameTrove.Application.Commands;
-using GameTrove.Application.Commands.Handlers;
 using GameTrove.Application.Infrastructure;
 using GameTrove.Application.Query;
 using GameTrove.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SystemFile = System.IO.File;
 
 namespace GameTrove.Api.Controllers
 {
