@@ -675,7 +675,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GameViewModel"
+                    "$ref": "#/components/schemas/GameSearchViewModel"
                   }
                 }
               }
@@ -1078,17 +1078,34 @@
           }
         }
       },
+      "GameSearchViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subtitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "SearchModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "text": {
             "type": "string",
-            "nullable": true
-          },
-          "mostRecentlyAdded": {
-            "type": "integer",
-            "format": "int32",
             "nullable": true
           }
         }

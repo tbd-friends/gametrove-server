@@ -10,7 +10,7 @@ using MediatR;
 
 namespace GameTrove.Application.Query.Handlers
 {
-    public class SearchForGamesHandler : IRequestHandler<SearchForGames, IEnumerable<GameViewModel>>
+    public class SearchForGamesHandler : IRequestHandler<SearchForGames, IEnumerable<GameSearchViewModel>>
     {
         private readonly GameTrackerContext _context;
 
@@ -19,7 +19,7 @@ namespace GameTrove.Application.Query.Handlers
             _context = context;
         }
 
-        public Task<IEnumerable<GameViewModel>> Handle(SearchForGames request, CancellationToken cancellationToken)
+        public Task<IEnumerable<GameSearchViewModel>> Handle(SearchForGames request, CancellationToken cancellationToken)
         {
             IQueryable<Title> query = _context.Titles;
 
@@ -35,48 +35,30 @@ namespace GameTrove.Application.Query.Handlers
                               into gpx
                           from pricing in gpx.DefaultIfEmpty()
                           where (
-                                  from c in _context.Copies
-                                  where c.GameId == pg.Id && c.TenantId == request.TenantId
-                                  select c).Any()
+                              from c in _context.Copies
+                              where c.GameId == pg.Id && c.TenantId == request.TenantId
+                              select c).Any()
                           select new
                           {
                               Id = pg.Id,
                               Name = t.Name,
                               Subtitle = t.Subtitle,
-                              Code = pg.Code,
-                              Registered = pg.Registered,
                               Platform = p.Name,
-                              IsFavorite = pg.IsFavorite,
-                              CompleteInBoxPrice = pricing.CompleteInBoxPrice,
-                              LoosePrice = pricing.LoosePrice,
                               Genres = (from tg in _context.TitleGenres
                                         join g in _context.Genres on tg.GenreId equals g.Id
                                         where tg.TitleId == t.Id
                                         select g.Name).ToList()
                           };
 
-            if (request.MostRecentlyAdded > 0)
-            {
-                results = results.OrderByDescending(r => r.Registered).Take(request.MostRecentlyAdded.Value);
-            }
-            else
-            {
-                results = results.OrderBy(r => r.Name);
-            }
+            results = results.OrderBy(r => r.Name);
 
             return Task.FromResult(results.AsEnumerable().Select(r =>
-                new GameViewModel
+                new GameSearchViewModel
                 {
                     Id = r.Id,
-                    Code = r.Code,
                     Name = r.Name,
                     Subtitle = r.Subtitle,
-                    Registered = r.Registered,
                     Platform = r.Platform,
-                    IsFavorite = r.IsFavorite,
-                    Genres = r.Genres,
-                    CompleteInBoxPrice = r.CompleteInBoxPrice,
-                    LoosePrice = r.LoosePrice
                 }));
         }
     }

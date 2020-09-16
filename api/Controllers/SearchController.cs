@@ -21,12 +21,11 @@ namespace GameTrove.Api.Controllers
         }
 
         [HttpPost("games"), Authorize(Roles = "Administrator,User")]
-        public async Task<IEnumerable<GameViewModel>> SearchGames(SearchModel model)
+        public async Task<IEnumerable<GameSearchViewModel>> SearchGames(SearchModel model)
         {
             return await _mediator.Send(new SearchForGames
             {
-                Text = model.Text,
-                MostRecentlyAdded = model.MostRecentlyAdded
+                Text = model.Text
             });
         }
     }

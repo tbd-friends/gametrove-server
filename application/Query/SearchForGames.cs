@@ -4,9 +4,8 @@ using GameTrove.Application.ViewModels;
 
 namespace GameTrove.Application.Query
 {
-    public class SearchForGames : AuthenticatedRequest<IEnumerable<GameViewModel>>
+    public class SearchForGames : AuthenticatedRequest<IEnumerable<GameSearchViewModel>>
     {
         public string Text { get; set; }
-        public int? MostRecentlyAdded { get; set; }
     }
 }
