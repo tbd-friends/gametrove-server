@@ -15,5 +15,7 @@ namespace GameTrove.Application.ViewModels
         public bool IsFavorite { get; set; }
         public decimal? CompleteInBoxPrice { get; set; }
         public decimal? LoosePrice { get; set; }
+        public int CopiesOwned { get; set; }
+        public IEnumerable<GameImageViewModel> Images { get; set; }
     }
 }

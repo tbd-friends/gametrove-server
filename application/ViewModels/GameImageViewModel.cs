@@ -6,5 +6,6 @@ namespace GameTrove.Application.ViewModels
     {
         public Guid Id { get; set; }
         public bool IsCoverArt { get; set; }
+        public string Url { get; set; }
     }
 }

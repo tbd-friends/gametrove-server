@@ -872,6 +872,34 @@
             "type": "number",
             "format": "decimal",
             "nullable": true
+          },
+          "copiesOwned": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "images": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/GameImageViewModel"
+            }
+          }
+        }
+      },
+      "GameImageViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "isCoverArt": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
