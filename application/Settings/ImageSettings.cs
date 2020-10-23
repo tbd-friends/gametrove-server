@@ -5,5 +5,6 @@
         public bool Local { get; set; }
         public string Path { get; set; }
         public string Container { get; set; }
+        public string Default { get; set; }
     }
 }

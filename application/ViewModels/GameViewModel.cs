@@ -17,5 +17,11 @@ namespace GameTrove.Application.ViewModels
         public decimal? LoosePrice { get; set; }
         public int CopiesOwned { get; set; }
         public IEnumerable<GameImageViewModel> Images { get; set; }
+
+        public GameViewModel()
+        {
+            Images = new GameImageViewModel[0];
+            Genres = new string[0];
+        }
     }
 }

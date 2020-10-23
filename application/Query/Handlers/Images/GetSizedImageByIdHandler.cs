@@ -31,9 +31,13 @@ namespace GameTrove.Application.Query.Handlers.Images
 
             if (_settings.Local)
             {
-                result = await _mediator.Send(new GetLocalFileContents() { Name = image.FileName }, cancellationToken);
+                result = await _mediator.Send(new GetLocalFileContents()
+                {
+                    Name =
+                        ImageFileName.GetGameImageFile(request.Id, image.GameId, ImageSize.Large)
+                }, cancellationToken);
 
-                result = result.ResizeImage((int)request.Size);
+                result = result?.ResizeImage((int)request.Size);
             }
             else
             {

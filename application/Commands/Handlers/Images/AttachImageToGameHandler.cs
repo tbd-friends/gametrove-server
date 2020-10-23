@@ -48,8 +48,8 @@ namespace GameTrove.Application.Commands.Handlers.Images
                         Directory.CreateDirectory(_imagePath);
                     }
 
-                    File.WriteAllBytes(Path.Combine(_imagePath, $"{request.GameId}_{gameImage.Id}.jpg"),
-                        request.Content);
+                    await File.WriteAllBytesAsync(Path.Combine(_imagePath, $"{request.GameId}_{gameImage.Id}.jpg"),
+                        request.Content, cancellationToken);
                 }
                 else
                 {
